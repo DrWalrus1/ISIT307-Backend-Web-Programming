@@ -1,0 +1,71 @@
+body {
+    padding-top: 6em;
+    padding-bottom: 6em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+textarea {
+    outline: none;
+    overflow: auto;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.cardCard {
+    text-align:center;
+    min-width: 25%;
+    max-width: 25%;
+    margin:1.25%;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.header {
+    background-color: forestgreen;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 1em;
+}
+
+.button {
+    cursor:pointer;
+    margin: .5em;
+}
+
+.priceFields {
+    width:4em;
+}
+
+.column {
+    text-align: left;
+    float: left;
+    width: auto;
+    margin-left: 1em;
+}
+
+.row::after {
+    max-width: 50%;
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.homeLink {
+    color: black;
+    text-decoration:none;
+}
+
+.homeLink:visited {
+    color: black;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+    }
+}
