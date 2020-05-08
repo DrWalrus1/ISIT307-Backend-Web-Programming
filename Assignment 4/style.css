@@ -1,0 +1,36 @@
+body {
+    padding-top: 6em;
+    padding-bottom: 6em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.cardCard {
+    text-align:center;
+    min-width: 25%;
+    max-width: 25%;
+    margin:1.25%;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.header {
+    background-color: forestgreen;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 1em;
+}
+
+.button {
+    cursor:pointer;
+}
+
+.clearable {
+    
+}
