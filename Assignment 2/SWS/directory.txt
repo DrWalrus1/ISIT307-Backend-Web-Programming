@@ -1,0 +1,7 @@
+name,email,phone,price,plate,kilometres,totalowners,repairs
+Luke Lynch,ll446@uowmail.edu.au,0412 123 456,10000,ABC 123,80000,2,Oil Replacement
+John Smith,Test@test.com,04123456789,50000,CAR,20000,1,N/a
+Jane Doe,Test2@test.com,04123456789,50000,VR00M,20000,1,N/a
+Luke Lynch,ll446@uowmail.edu.au,0412 123 456,10000,ABC 456,80000,2,Oil Replacement
+John Smith,Test@test.com,04123456789,50000,TRUCK,20000,1,N/a
+Jane Doe,Test2@test.com,04123456789,50000,FWOOM,20000,1,N/a
