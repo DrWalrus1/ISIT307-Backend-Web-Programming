@@ -112,6 +112,7 @@ function LoadGames($games) {
     return $rows;
 }
 
+//TODO: If createFilter.php has updated version of function. please replace with newer version
 function getPlatforms() {
     $platforms = array();
     if (!empty($_GET)) {
