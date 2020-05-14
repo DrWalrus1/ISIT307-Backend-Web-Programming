@@ -1,7 +1,22 @@
 body {
-    padding-top: 6em;
     padding-bottom: 6em;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.searchArea {
+    margin-top: 4.85em;
+    margin-left: -0.47em;
+    padding: 0;
+    width: 12em;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+.viewArea {
+    padding-top: 6em;
+    margin-left: 10%;
 }
 
 textarea {
