@@ -58,7 +58,7 @@ function checkInputs() {
     }
 }
 
-function submitLog(){
+function submitLog() {
     echo $_SERVER['REMOTE_ADDR'];
 }
 //submitLog();
@@ -132,16 +132,13 @@ if (isset($file)) {
     <title>Game Store</title>
 </head>
 <body>
-    <div class="header">
-        <h1 style="display:inline-block"><a href="/" class="homeLink">Game Store</a></h1>
-        <p style="display:inline-block">Admin Page</p>
-    </div>
+    <?php include 'header.html'?>
     <div style="text-align:center">
         <h2>Individual Upload</h2>
         <form method="get" id="gameForm">
             <input type="hidden" name="formID" value=1>
             <label for="gameTitle">Game Title</label><br>
-            <input class="clearable" type="text" id="gameTitle" name="title" value="<?= (isset($title)) ? $title: ''?>"/>
+            <input type="text" id="gameTitle" name="title" value="<?= (isset($title)) ? $title: ''?>"/>
             <br>
             <?php
                 if (!empty($_GET) && !isset($title) && $_GET["formID"] == 1) {
@@ -150,7 +147,7 @@ if (isset($file)) {
             ?>
             <br>
             <label for="price">Price</label><br>
-            <input class="clearable" type="text" id="price" name="price" value="<?= (isset($price)) ? $price: ""?>"/>
+            <input type="text" id="price" name="price" value="<?= (isset($price)) ? $price: ""?>"/>
             <br>
             <?php
                 if (!empty($_GET) && !isset($price) && $_GET["formID"] == 1) {
@@ -159,7 +156,7 @@ if (isset($file)) {
             ?>
             <br>
             <label for="genre">Genre</label><br>
-            <input class="clearable" type="text" id="genre" name="genre" value="<?= (isset($genre)) ? $genre: ""?>"/>
+            <input type="text" id="genre" name="genre" value="<?= (isset($genre)) ? $genre: ""?>"/>
             <br>
             <?php
                 if (!empty($_GET) && !isset($genre) && $_GET["formID"] == 1) {
@@ -168,7 +165,7 @@ if (isset($file)) {
             ?>
             <br>
             <label for="platform">Platform</label><br>
-            <input class="clearable" type="text" id="platform" name="platform" value="<?= (isset($platform)) ? $platform: ""?>"/>
+            <input type="text" id="platform" name="platform" value="<?= (isset($platform)) ? $platform: ""?>"/>
             <br>
             <?php
                 if (!empty($_GET) && !isset($platform) && $_GET["formID"] == 1) {
@@ -177,7 +174,7 @@ if (isset($file)) {
             ?>
             <br>
             <label for="classification">Classification</label><br>
-            <input class="clearable" type="text" id="classification" name="classification" value="<?= (isset($classification)) ? $classification: ""?>"/>
+            <input type="text" id="classification" name="classification" value="<?= (isset($classification)) ? $classification: ""?>"/>
             <br>
             <?php
                 if (!empty($_GET) && !isset($platform) && $_GET["formID"] == 1) {
@@ -197,6 +194,7 @@ if (isset($file)) {
             ?>
         </form>
     </div>
+    <!-- TODO: Add update game section -->
     <hr>
     <div style="text-align:center">
         <h2>Bulk Upload</h2>
