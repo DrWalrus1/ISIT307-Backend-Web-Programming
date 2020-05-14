@@ -74,30 +74,31 @@ function createCheckboxInput($displayName, $inputID, $inputName, $isChecked) {
     return $string;
 }
 
-// function createCheckboxGroup($groupName, $category, array $stickyValues = NULL) {
-
-// }
+function initialiseCheckboxGroup($groupName, $category, array $stickyValues = NULL) {
+    $string = "<div id=\"$groupName\">\n";
+    if (!is_null($stickyValues) && isset($stickyValues[$groupName])) {
+        if ($stickyValues[$groupName][0] == $groupName) {
+            $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\" checked>";
+        } else {
+            $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\">";
+        }
+    } else {
+        $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\">";
+    }
+    return $string;
+}
 
 //Create grouped checkboxes e.g. manufacturer
 //TODO: anonymize function
-//FIXME: THIS IS A MESS OF A FUNCTION! PLEASE CLEAN
-function createGroupedCheckboxes(array $groupNames, $inputName, array $stickyValues = NULL) {
+function createGroupedCheckboxes(array $groupNames, $category, $inputName, array $stickyValues = NULL) {
     $platforms = dbGetPlatforms();
     $string = "";
     foreach ($groupNames as $groupName) {
-        $string .= "<div id=\"$groupName\">\n";
-            if (!is_null($stickyValues) && isset($stickyValues[$groupName])) {
-                if ($stickyValues[$groupName][0] == $groupName) {
-                    $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"platform[" . $groupName . "][]\" value=\"$groupName\" checked>";
-                } else {
-                    $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"platform[" . $groupName . "][]\" value=\"$groupName\">";
-                }
-            } else {
-                $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"platform[" . $groupName . "][]\" value=\"$groupName\">";
-            }
-        $string .= "<label for=\"" . $groupName . "Checkbox\">$groupName</label><br>" .
+        $string .= initialiseCheckboxGroup($groupName, $category, $stickyValues);
+        $string .= createLabel(($groupName . "Checkbox"), $groupName) . "<br>" .
             "<div id=\"" . $groupName . "Selection\" style=\"padding-left:0.75em\">";
         foreach ($platforms as $platform) {
+            //FIXME: THIS IS A MESS! PLEASE CLEAN
             if ($platform["name"] != $platform["manufacturer"]) { //Eliminate PC
                 if ($platform["manufacturer"] == $groupName) {
                     $found = false;
@@ -123,19 +124,19 @@ function createGroupedCheckboxes(array $groupNames, $inputName, array $stickyVal
     return $string;
 }
 
-function createForm(mysqli $conn) {
+function createForm(mysqli $conn, $formID) {
     $string = 
-    "<div id=\"searchArea\" class=\"searchArea\"><form>" .
+    "<div id=\"searchArea\" class=\"searchArea\"><form id=$formID>" .
     createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
     createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) .
     createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 0) . "<hr>";
     if (!empty($_GET) && isset($_GET["platform"])) {
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform[]", $_GET["platform"]);
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $_GET["platform"]);
     } else {
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform[]");
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]");
     }
-    $string .= createButtons() .
-    "</form></div>";
+    $string .= createButtons();
+    $string .= "</form></div>";
     return $string;
 }
 
@@ -161,10 +162,8 @@ function getManufacturers(mysqli $conn) {
 </head>
 <body>
     <?php include 'header.html';
-    echo createForm($conn);
+    echo createForm($conn, "form1");
     ?>
-    <div class="viewArea">
-    </div>
     <footer>
         <script src="script.js"></script>
     </footer>
