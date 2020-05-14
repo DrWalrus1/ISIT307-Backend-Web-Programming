@@ -133,7 +133,7 @@ if (isset($file)) {
 </head>
 <body>
     <?php include 'header.html'?>
-    <div style="text-align:center">
+    <div style="text-align:center;margin-top: 6em;">
         <h2>Individual Upload</h2>
         <form method="get" id="gameForm">
             <input type="hidden" name="formID" value=1>

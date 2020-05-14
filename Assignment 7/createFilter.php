@@ -23,13 +23,14 @@ function loadGamesFromDB(mysqli $conn){
     return $games;
 }
 
-function createFilter() {
-
-}
-
 // TODO: add aggregate counter of currently showing games matching this checkbox
 function createLabel ($inputID, $displayName) {
     return "<label for=\"$inputID\">$displayName</label>";
+}
+
+function createButtons(){
+    return "<input class=\"button\" type=\"submit\" value=\"Search\"/>
+    <button type=\"button\" class=\"button\" onclick=\"clearForm(this.form.id);\">Clear</button>";
 }
 
 function createTextInput($displayName, $inputID, $inputName, $placeholder = NULL) {
@@ -61,39 +62,80 @@ function createNumberInput($displayName, $inputID, $inputName, $minNum = NULL, $
 }
 
 //Create individual checkbox with label
-//TODO: add 2d array functionality
 function createCheckboxInput($displayName, $inputID, $inputName, $isChecked) {
     $string =
     "<input type=\"checkbox\" id=\"$inputID\" name=\"$inputName\" value=\"$displayName\"";
     if ($isChecked) {
         $string .= " checked";
     }
-    $string .= "\>" .
+    $string .= ">" .
     createLabel($inputID, $displayName) .
     "<br>\n";
     return $string;
 }
 
+// function createCheckboxGroup($groupName, $category, array $stickyValues = NULL) {
+
+// }
+
 //Create grouped checkboxes e.g. manufacturer
-function createGroupedCheckboxes(array $groupNames, $inputName) {
-    // TODO: Add sticky form functionality
+//TODO: anonymize function
+//FIXME: THIS IS A MESS OF A FUNCTION! PLEASE CLEAN
+function createGroupedCheckboxes(array $groupNames, $inputName, array $stickyValues = NULL) {
     $platforms = dbGetPlatforms();
     $string = "";
     foreach ($groupNames as $groupName) {
-        $string .= 
-        "<div id=\"$groupName\">\n" .
-            "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"platform[]\" value=\"$groupName\">" .
-            "<label for=\"" . $groupName . "Checkbox\">$groupName</label><br>" .
+        $string .= "<div id=\"$groupName\">\n";
+            if (!is_null($stickyValues) && isset($stickyValues[$groupName])) {
+                if ($stickyValues[$groupName][0] == $groupName) {
+                    $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"platform[" . $groupName . "][]\" value=\"$groupName\" checked>";
+                } else {
+                    $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"platform[" . $groupName . "][]\" value=\"$groupName\">";
+                }
+            } else {
+                $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"platform[" . $groupName . "][]\" value=\"$groupName\">";
+            }
+        $string .= "<label for=\"" . $groupName . "Checkbox\">$groupName</label><br>" .
             "<div id=\"" . $groupName . "Selection\" style=\"padding-left:0.75em\">";
         foreach ($platforms as $platform) {
-            if ($platform["name"] != $platform["manufacturer"]) {
+            if ($platform["name"] != $platform["manufacturer"]) { //Eliminate PC
                 if ($platform["manufacturer"] == $groupName) {
-                    $string .= createCheckboxInput($platform["name"], $platform["initial"], $inputName, false);
+                    $found = false;
+                    
+                    if (!is_null($stickyValues) && isset($stickyValues[$groupName])) {
+                        for ($i=0; $i < count($stickyValues[$groupName]); $i++) {
+                            if ($stickyValues[$groupName][$i] == $platform["name"]) {
+                                $string .= createCheckboxInput($platform["name"], $platform["initial"], str_replace("[]", "[" . $groupName . "][]", $inputName), true);
+                                $found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$found) {
+                    $string .= createCheckboxInput($platform["name"], $platform["initial"], str_replace("[]", "[" . $groupName . "][]", $inputName), false);
+                    }
+                    
                 }
             }
         }
         $string .= "</div></div>";
     }
+    return $string;
+}
+
+function createForm(mysqli $conn) {
+    $string = 
+    "<div id=\"searchArea\" class=\"searchArea\"><form>" .
+    createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
+    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) .
+    createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 0) . "<hr>";
+    if (!empty($_GET) && isset($_GET["platform"])) {
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform[]", $_GET["platform"]);
+    } else {
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform[]");
+    }
+    $string .= createButtons() .
+    "</form></div>";
     return $string;
 }
 
@@ -108,10 +150,6 @@ function getManufacturers(mysqli $conn) {
     return $manufacturers;
 }
 
-echo createTextInput("Game Title", "titleInput", "title", "Game Title");
-echo createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0);
-echo createGroupedCheckboxes(getManufacturers($conn), "platform[]");
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -122,7 +160,11 @@ echo createGroupedCheckboxes(getManufacturers($conn), "platform[]");
     <title>Game Store</title>
 </head>
 <body>
-    <?php include 'header.html'?>
+    <?php include 'header.html';
+    echo createForm($conn);
+    ?>
+    <div class="viewArea">
+    </div>
     <footer>
         <script src="script.js"></script>
     </footer>

@@ -1,5 +1,5 @@
 <?php
-define('DB_SERVER', 'localhost'); //TODO: MUST CHANGE BACK TO LOCALHOST WHEN FINISHED!!
+define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'webLogin');
 define('DB_PASSWORD', 'ThePasswordIsCarrot1');
 define('DB_NAME', 'games');
