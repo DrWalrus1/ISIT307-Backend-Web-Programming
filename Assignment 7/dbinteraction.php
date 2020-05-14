@@ -18,7 +18,8 @@ function dbGetColumns(mysqli $conn){
     }
 }
 
-function dbGetPlatforms(mysqli $conn) {
+function dbGetPlatforms() {
+    global $conn;
     $platforms = array();
     $query = "SELECT * FROM platforms;";
     if ($result = $conn->query($query)) {
@@ -98,6 +99,37 @@ function getGenreID($gName) {
             return $key["id"];
         }
     }
-    // TODO Add contingency to add new classification when not found
+    // TODO Add contingency to add new genre when not found
+}
+
+//functions that convert id's to names/initials
+function getPlatformNameByID($pID) {
+    global $conn;
+    $query = "SELECT pName from platforms WHERE pID = $pID";
+    if ($result = $conn->query($query)) {
+        while ($row = $result -> fetch_row()) {
+            return $row[0];
+        }
+    }
+}
+
+function getClassificationInitialByID($cID) {
+    global $conn;
+    $query = "SELECT initial from classification WHERE cID = $cID";
+    if ($result = $conn->query($query)) {
+        while ($row = $result -> fetch_row()) {
+            return $row[0];
+        }
+    }
+}
+
+function getGenreNameByID($gID) {
+    global $conn;
+    $query = "SELECT gName from genres WHERE gID = $gID";
+    if ($result = $conn->query($query)) {
+        while ($row = $result -> fetch_row()) {
+            return $row[0];
+        }
+    }
 }
 ?>

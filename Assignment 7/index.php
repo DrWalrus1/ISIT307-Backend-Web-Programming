@@ -1,6 +1,5 @@
 <?php
 $games;
-$filteredgames;
 $columns;
 $platforms;
 $classifications;
@@ -31,31 +30,49 @@ function readCSV(){
         return $games;
 }
 
+function loadGamesFromDB(mysqli $conn){
+    $games = array();
+    $query = "SELECT * FROM games";
+    if ($result = $conn->query($query)) {
+        while ($row = $result->fetch_assoc()) {
+            $newGame = array(
+                "id" => $row["gID"],
+                "title" => $row["title"],
+                "price" => $row["price"],
+                "genre" => getGenreNameByID($row["genre"]),
+                "platform" => getPlatformNameByID($row["platform"]),
+                "classification" => getClassificationInitialByID($row["classification"])
+            );
+            $games[] = $newGame;
+        }
+    }
+    return $games;
+}
+
 function getUniqueGenres($games) {
     $genres = array();
     foreach ($games as $key) {
         $found = false;
         for ($i = 0; $i < count($genres); $i++) {
-            if ($genres[$i] == $key["Genre"]) {
+            if ($genres[$i] == $key["genre"]) {
                 $found = true;
             }
         }
         if (!$found) {
-            $genres[] = $key["Genre"];
+            $genres[] = $key["genre"];
         }
     }
     return $genres;
 }
 
-function createCard($game) {
-    $test = 
+function createCard($game) { 
     $newCard =
     "<div class=\"cardCard\" id=\"" . $game["id"] . "\">
-            <h3 name=\"title\" style=\"color:blue\">" . $game["Title"] . "</h4>
-            <h5 name=\"genre\">". $game["Genre"] . "</h5>
-            <h6 name=\"platform\">" . $game["Platform"] . "</h4>
-            <h6 name=\"classification\">" . $game["Classification"] . "</h4>
-            <h4 name=\"price\">$" . $game["Price"] . "</h4>
+            <h3 name=\"title\" style=\"color:blue\">" . $game["title"] . "</h4>
+            <h5 name=\"genre\">". $game["genre"] . "</h5>
+            <h6 name=\"platform\">" . $game["platform"] . "</h4>
+            <h6 name=\"classification\">" . $game["classification"] . "</h4>
+            <h4 name=\"price\">$" . $game["price"] . "</h4>
             <br><br>
     </div>";
     return $newCard;
@@ -159,20 +176,20 @@ function FilterGames($games) {
     foreach ($games as $selected) {
         //Title
         if (isset($title)) {
-            if (!is_numeric(strpos($selected['Title'], $title))) {
+            if (!is_numeric(strpos($selected['title'], $title))) {
                 continue;
             }
         }
         //Min Price
         if (isset($minPrice)) {
-            if ($selected['Price'] < $minPrice) {
+            if ($selected['price'] < $minPrice) {
                 continue;
             }
         }
         
         //Max Price
         if (isset($maxPrice)) {
-            if ($selected['Price'] > $maxPrice) {
+            if ($selected['price'] > $maxPrice) {
                 continue;
             }
         }
@@ -180,7 +197,7 @@ function FilterGames($games) {
         if (!empty($platforms)) {
             $found = false;
             foreach ($platforms as $platform) {
-                if ($platform === $selected["Platform"]) {
+                if ($platform === $selected["platform"]) {
                     $found = true;
                     break;
                 }
@@ -195,7 +212,7 @@ function FilterGames($games) {
         if (isset($classifications)) {
             $found = false;
             foreach ($classifications as $classification) {
-                if ($classification === $selected["Classification"]) {
+                if ($classification === $selected["classification"]) {
                     $found = true;
                     break;
                 }
@@ -212,7 +229,7 @@ function FilterGames($games) {
 $columns = dbGetColumns($conn);
 $platforms = dbGetPlatforms($conn);
 $classifications = dbGetClassification($conn);
-$games = readCSV();
+$games = loadGamesFromDB($conn);
 $genres = getUniqueGenres($games);
 
 ?>
@@ -226,10 +243,7 @@ $genres = getUniqueGenres($games);
     <title>Game Store</title>
 </head>
 <body>
-    <div class="header">
-        <h1 style="display:inline-block"><a href="/" class="homeLink">Game Store</a></h1>
-        <a href="/admin.php" style="float: right;margin-right: 2em;padding-top: 1.75em;">Admin Page</a>
-    </div>
+    <?php include 'header.html'?>
     <div style="text-align:center">
         <div id="searchArea">
             <form id="searchForm">
@@ -247,18 +261,34 @@ $genres = getUniqueGenres($games);
                 <div class="row">
                     <div class="column">
                         <!-- TODO: dynamically add checkboxes -->
-                        <input type="checkbox" id="PS4" name="platform[]" value="PlayStation 4"><label for="PS4">Playstation 4</label><br>
-                        <input type="checkbox" id="PS3" name="platform[]" value="PlayStation 3"><label for="PS3">Playstation 3</label><br>
-                        <input type="checkbox" id="Vita" name="platform[]" value="PlayStation Vita"><label for="Vita">Playstation Vita</label><br>
-                        <input type="checkbox" id="Xbox360" name="platform[]" value="Xbox 360"><label for="Xbox360">Xbox 360</label><br>
-                        <input type="checkbox" id="XboxOne" name="platform[]" value="Xbox One"><label for="XboxOne">Xbox One</label><br>
-                        <input type="checkbox" id="Switch" name="platform[]" value="Nintendo Switch"><label for="Switch">Nintendo Switch</label><br>
+                        <!-- TODO: Add counters for current number being shown in viewArea -->
+                        <div id="PlayStation">
+                            <input type="checkbox" id="PlayStationCheckbox" name="platform[]" value="PlayStation"><label for="PlayStationCheckbox">PlayStation</label><br>
+                            <div id="PlayStationSelection" style="padding-left:0.75em">
+                                <input type="checkbox" id="PS4" name="platform[]" value="PlayStation 4"><label for="PS4">Playstation 4</label><br>
+                                <input type="checkbox" id="PS3" name="platform[]" value="PlayStation 3"><label for="PS3">Playstation 3</label><br>
+                                <input type="checkbox" id="Vita" name="platform[]" value="PlayStation Vita"><label for="Vita">Playstation Vita</label><br>
+                            </div>
+                        </div>
+                        <div id="Xbox">
+                            <input type="checkbox" id="XboxCheckbox" name="platform[]" value="Xbox"><label for="XboxCheckbox">Xbox</label><br>
+                            <div id="boxSelection" style="padding-left:0.75em">
+                                <input type="checkbox" id="Xbox360" name="platform[]" value="Xbox 360"><label for="Xbox360">Xbox 360</label><br>
+                                <input type="checkbox" id="XboxOne" name="platform[]" value="Xbox One"><label for="XboxOne">Xbox One</label><br>
+                            </div>
+                        </div>
                     </div>
                     <div class="column">
-                        <input type="checkbox" id="Wii" name="platform[]" value="Nintendo Wii"><label for="Wii">Nintendo Wii</label><br>
-                        <input type="checkbox" id="WiiU" name="platform[]" value="Nintendo Wii U"><label for="WiiU">Nintendo Wii U</label><br>
-                        <input type="checkbox" id="3DS" name="platform[]" value="Nintendo 3DS"><label for="3DS">Nintendo 3DS</label><br>
-                        <input type="checkbox" id="DS" name="platform[]" value="Nintendo DS"><label for="DS">Nintendo DS</label><br>
+                        <div id="nintendo">
+                            <input type="checkbox" id="NintendoCheckbox" name="platform[]" value="Nintendo"><label for="NintendoCheckbox">Nintendo</label><br>
+                            <div id="nintendoSelection" style="padding-left:0.75em">
+                                <input type="checkbox" id="Switch" name="platform[]" value="Nintendo Switch"><label for="Switch">Nintendo Switch</label><br>
+                                <input type="checkbox" id="Wii" name="platform[]" value="Nintendo Wii"><label for="Wii">Nintendo Wii</label><br>
+                                <input type="checkbox" id="WiiU" name="platform[]" value="Nintendo Wii U"><label for="WiiU">Nintendo Wii U</label><br>
+                                <input type="checkbox" id="3DS" name="platform[]" value="Nintendo 3DS"><label for="3DS">Nintendo 3DS</label><br>
+                                <input type="checkbox" id="DS" name="platform[]" value="Nintendo DS"><label for="DS">Nintendo DS</label><br>
+                            </div>
+                        </div>
                         <input type="checkbox" id="PC" name="platform[]" value="PC"><label for="PC">PC</label><br>
                     </div>
                 </div>
@@ -278,7 +308,6 @@ $genres = getUniqueGenres($games);
                 <br>
                 <br>
                 <input class="button" type="submit" value="Search"/>
-                <!-- <input class="button" type="reset" value="Reset"/> -->
                 <button type="button" class="button" onclick="clearForm(this.form.id);">Clear</button>
             </form>
         </div>
