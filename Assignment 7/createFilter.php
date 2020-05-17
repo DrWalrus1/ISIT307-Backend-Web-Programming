@@ -99,6 +99,7 @@ function createGroupedCheckboxes(array $groupNames, $category, $inputName, array
             "<div id=\"" . $groupName . "Selection\" style=\"padding-left:0.75em\">";
         foreach ($platforms as $platform) {
             //FIXME: THIS IS A MESS! PLEASE CLEAN
+            //TODO: Add efficiency track
             if ($platform["name"] != $platform["manufacturer"]) { //Eliminate PC
                 if ($platform["manufacturer"] == $groupName) {
                     $found = false;

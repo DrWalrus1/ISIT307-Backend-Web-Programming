@@ -38,7 +38,7 @@ function checkInputs() {
 
             if (isset($title, $price, $genre, $platform, $classification)) {
                 $gameArray = array($title, $price, $genre, $platform, $classification);
-                
+                // TODO: create new AddGame to add to database
                 AddGame($gameArray);
                 header("Location: /");
             }
@@ -155,6 +155,8 @@ if (isset($file)) {
                 }
             ?>
             <br>
+            <!-- TODO: Change Genre, Platform and Classification to use list of distinct categories -->
+            <!-- TODO: Add way to add new Genre, Platform and Classifications... -->
             <label for="genre">Genre</label><br>
             <input type="text" id="genre" name="genre" value="<?= (isset($genre)) ? $genre: ""?>"/>
             <br>
@@ -197,9 +199,16 @@ if (isset($file)) {
     <!-- TODO: Add update game section -->
     <hr>
     <div style="text-align:center">
+        <h2>Update Game Entry</h2>
+        <form id="updateForm">
+
+        </form>
+    </div>
+    <hr>
+    <div style="text-align:center">
         <h2>Bulk Upload</h2>
         <form id="bulkForm" method="get">
-            <input type="hidden" name="formID" value=2>
+            <input type="hidden" name="formID" value=3> <!-- TODO: Remember to fix any function that relies on THIS hidden form id -->
             <label for="fileInput">Upload File:</label><br>
             <input type="file" name="fileUpload" id="fileInput" accept="<?= getAcceptedFileTypes() ?>" style="margin-left: 3em;"><br>
             <?php
