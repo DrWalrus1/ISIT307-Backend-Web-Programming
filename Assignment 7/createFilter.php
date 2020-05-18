@@ -163,7 +163,26 @@ function getManufacturers(mysqli $conn) {
 </head>
 <body>
     <?php include 'header.html';
-    echo createForm($conn, "form1");
+    $string = "<div id=\"searchArea\" class=\"searchArea\"><form id=\"form1>\"" .
+    createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
+    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) .
+    createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 0) . "<hr>";
+    if (!empty($_GET) && isset($_GET["platform"]))
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $_GET["platform"]);
+    else
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]");
+    
+    $string .= "<hr>";
+    $string .= createLabel("Classification", "Classification") . "<br>";
+    
+    $classification = dbGetClassification();
+    foreach ($classification as $key) {
+        $string .= createCheckboxInput($key["initial"], $key["initial"], "classification[]", false);
+    }
+    $string .= "<br><hr>";
+    $string .= createButtons();
+    $string .= "</form></div>";
+    echo $string;
     ?>
     <footer>
         <script src="script.js"></script>

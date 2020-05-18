@@ -37,7 +37,8 @@ function dbGetPlatforms() {
     }
 }
 
-function dbGetClassification(mysqli $conn) {
+function dbGetClassification() {
+    global $conn;
     $classifications = array();
     $query = "SELECT * FROM classification;";
     if ($result = $conn->query($query)) {

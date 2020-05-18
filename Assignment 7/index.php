@@ -68,7 +68,7 @@ function getUniqueGenres($games) {
 function createCard($game) { 
     $newCard =
     "<div class=\"cardCard\" id=\"" . $game["id"] . "\">
-            <h3 name=\"title\" style=\"color:blue\">" . $game["title"] . "</h4>
+            <h3 name=\"title\" style=\"color:blue;padding:5%;\">" . $game["title"] . "</h4>
             <h5 name=\"genre\">". $game["genre"] . "</h5>
             <h6 name=\"platform\">" . $game["platform"] . "</h4>
             <h6 name=\"classification\">" . $game["classification"] . "</h4>

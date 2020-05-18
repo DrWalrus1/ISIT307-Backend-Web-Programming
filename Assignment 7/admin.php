@@ -14,6 +14,7 @@ require_once "dbinteraction.php";
 
 function checkInputs() {
     if (!empty($_GET["formID"])) {
+		// TODO: Change to switch statement
         if ($_GET["formID"] == 1) {
             if (!empty($_GET["title"])) {
                 global $title;
@@ -42,7 +43,7 @@ function checkInputs() {
                 AddGame($gameArray);
                 header("Location: /");
             }
-        } else if ($_GET["formID"] == 2) {
+        } else if ($_GET["formID"] == 3) {
             // TODO: Move to own function
             if (!empty($_GET["fileUpload"])) {
                 $fileinfo = pathinfo($_GET["fileUpload"]);
@@ -200,9 +201,33 @@ if (isset($file)) {
     <hr>
     <div style="text-align:center">
         <h2>Update Game Entry</h2>
-        <form id="updateForm">
-
-        </form>
+        <input type="text" id="updateSearch">
+        <br><br>
+        <table class="updateTable">
+            <thead class="updateTable">
+                <tr>
+                    <td style="min-width:3.5em">Title</td>
+                    <td style="min-width:3.5em">Price</td>
+                    <td style="min-width:3.5em">Genre</td>
+                    <td style="min-width:4.5em">Platform</td>
+                    <td style="min-width:6.5em">Classification</td>
+                </tr>
+            </thead>
+            <tbody class="updateTable">
+                <!-- TODO: PHP fill rows -->
+                <tr id="row1">
+                    <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                    <td onclick="this.children[1].focus();" style="text-align:justify">
+                        <p style="margin:0;display:inline-block">$</p>
+                        <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                    </td> <!-- TODO: Add check for number -->
+                    <td><div contenteditable name="genre">Genre</div></td>
+                    <td><div contenteditable name="plat">Platform</div></td>
+                    <td><div contenteditable name="classification">Classification</div></td>
+                    <td style="border:0px;width:4.5em"><button onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript submit form -->
+                </tr>
+            </tbody>
+        </table>
     </div>
     <hr>
     <div style="text-align:center">

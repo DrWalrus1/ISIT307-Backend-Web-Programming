@@ -19,4 +19,8 @@ function clearForm(formID){
 
 }
 
+function checkField(priceID) {
+    
+}
+
 // document.getElementById("PS4").indeterminate = true;
