@@ -1,0 +1,52 @@
+table {
+    width: 100%;
+}
+
+thead, tbody tr {
+    display: table;
+    width: 55em;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+tbody {
+    display: block;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    table-layout: fixed;
+    max-height: 10em;
+}
+
+th, td {
+    border: 1px solid black;
+    
+}
+
+.col1 {
+    border:0px;
+    width:2em;
+}
+
+.col2 {
+    min-width:3.5em;
+}
+
+.col3 {
+    min-width:3.5em;
+    width:3.5em;
+}
+
+.col4 {
+    min-width:4.5em;
+    width:4.5em;
+}
+
+.col5 {
+    min-width:6.5em;
+    width:6.5em
+}
+
+.col6 {
+    border:0px;
+    width: 4.5em;
+}
