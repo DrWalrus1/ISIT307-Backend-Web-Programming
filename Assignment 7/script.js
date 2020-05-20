@@ -45,7 +45,7 @@ function checkRow(rowID, isRowIncluded) {
 }
 
 function updateRow(rowID) {
-
+    getRowData(rowID);
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "modifyData.php", true);
     xhttp.responseType = "text";
@@ -62,7 +62,7 @@ function updateRow(rowID) {
 }
 
 function deleteRow(rowID) {
-
+    
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "modifyData.php", true);
     xhttp.responseType = "text";
@@ -76,4 +76,18 @@ function deleteRow(rowID) {
         }
     };
 }
-// document.getElementById("PS4").indeterminate = true;
+
+function getRowData(rowID) {
+    let rowData = document.getElementById(rowID).children;
+    let rowInfo = [];
+    for (let i = 1; i < rowData.length-1; i++) {
+        let innerElements = rowData[i].children;
+        for (let x = 0; x < innerElements.length; x++) {
+            if (innerElements[x].hasAttribute("name")) {
+                rowInfo[innerElements[x].getAttribute("name")] = innerElements[x].innerHTML;
+            }
+        }
+
+    }
+    return rowInfo;
+}
