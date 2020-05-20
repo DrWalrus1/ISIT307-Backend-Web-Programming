@@ -221,7 +221,7 @@ if (isset($file)) {
                 <tbody>
                     <!-- TODO: PHP fill rows -->
                     <tr id="row1">
-                        <td class="col1"><input type="checkbox" id="row1CheckLabel" onchange="console.log(this.parentElement.parentElement.id, this.checked);"></td>
+                        <td class="col1"><input type="checkbox" id="row1CheckLabel" onchange="checkRow(this.parentElement.parentElement.id, this.checked);"></td>
                         <td class="col2"><div contenteditable name="title">Test Title: The Naming</div></td>
                         <td class="col3" onclick="this.children[1].focus();" style="text-align:justify">
                             <p style="margin:0;display:inline-block">$</p>
@@ -237,8 +237,8 @@ if (isset($file)) {
             </table>
         </div>
         <br><br>
-        <button class="button" onclick="UpdateAll();">Update Selected</button>
-        <button class="button" onclick="DeleteAll();">Delete Selected</button>
+        <button class="button" onclick="UpdateAll();">Update Selected</button> <!-- TODO: Have Javascript execute post/get on mass -->
+        <button class="button" onclick="DeleteAll();">Delete Selected</button> <!-- TODO: Have Javascript execute post/get on mass-->
     </div>
     <hr>
     <div style="text-align:center">
