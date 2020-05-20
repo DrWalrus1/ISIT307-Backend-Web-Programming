@@ -201,33 +201,121 @@ if (isset($file)) {
     <hr>
     <div style="text-align:center">
         <h2>Update Game Entry</h2>
-        <input type="text" id="updateSearch">
+        <label for="updateSearch">Search: </label><input type="text" id="updateSearch"/>
         <br><br>
-        <table class="updateTable">
-            <thead class="updateTable">
-                <tr>
-                    <td style="min-width:3.5em">Title</td>
-                    <td style="min-width:3.5em">Price</td>
-                    <td style="min-width:3.5em">Genre</td>
-                    <td style="min-width:4.5em">Platform</td>
-                    <td style="min-width:6.5em">Classification</td>
-                </tr>
-            </thead>
-            <tbody class="updateTable">
-                <!-- TODO: PHP fill rows -->
-                <tr id="row1">
-                    <td><div contenteditable name="title">Test Title: The Naming</div></td>
-                    <td onclick="this.children[1].focus();" style="text-align:justify">
-                        <p style="margin:0;display:inline-block">$</p>
-                        <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
-                    </td> <!-- TODO: Add check for number -->
-                    <td><div contenteditable name="genre">Genre</div></td>
-                    <td><div contenteditable name="plat">Platform</div></td>
-                    <td><div contenteditable name="classification">Classification</div></td>
-                    <td style="border:0px;width:4.5em"><button onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript submit form -->
-                </tr>
-            </tbody>
-        </table>
+        <div style="display:inline-block">
+            <table class="fixed_header">
+                <thead >
+                    <tr>
+                        <th scope="col" style="border:0px;"></th>
+                        <th scope="col" style="min-width:3.5em">Title</th>
+                        <th scope="col" style="min-width:3.5em">Price</th>
+                        <th scope="col" style="min-width:3.5em">Genre</th>
+                        <th scope="col" style="min-width:4.5em">Platform</th>
+                        <th scope="col" style="min-width:6.5em">Classification</th>
+                        <th scope="col" style="border:0px;"></th>
+                        <th scope="col" style="border:0px;"></th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <!-- TODO: PHP fill rows -->
+                    <tr id="row1">
+                        <td style="border:0px;min-width:2em;"><input type="checkbox" id="row1CheckLabel"></td>
+                        <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                        <td onclick="this.children[1].focus();" style="text-align:justify">
+                            <p style="margin:0;display:inline-block">$</p>
+                            <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                        </td> <!-- TODO: Add check for number -->
+                        <td><div contenteditable name="genre">Genre</div></td>
+                        <td><div contenteditable name="plat">Platform</div></td>
+                        <td><div contenteditable name="classification">Classification</div></td>
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                    </tr>
+                    <tr id="row2">
+                        <td style="border:0px;min-width:2em;"><input type="checkbox" id="row1CheckLabel"></td>
+                        <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                        <td onclick="this.children[1].focus();" style="text-align:justify">
+                            <p style="margin:0;display:inline-block">$</p>
+                            <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                        </td> <!-- TODO: Add check for number -->
+                        <td><div contenteditable name="genre">Genre</div></td>
+                        <td><div contenteditable name="plat">Platform</div></td>
+                        <td><div contenteditable name="classification">Classification</div></td>
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                    </tr>
+                    <tr id="row3">
+                        <td style="border:0px;min-width:2em;"><input type="checkbox" id="row1CheckLabel"></td>
+                        <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                        <td onclick="this.children[1].focus();" style="text-align:justify">
+                            <p style="margin:0;display:inline-block">$</p>
+                            <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                        </td> <!-- TODO: Add check for number -->
+                        <td><div contenteditable name="genre">Genre</div></td>
+                        <td><div contenteditable name="plat">Platform</div></td>
+                        <td><div contenteditable name="classification">Classification</div></td>
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                    </tr>
+                    <tr id="row4">
+                        <td style="border:0px;min-width:2em;"><input type="checkbox" id="row1CheckLabel"></td>
+                        <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                        <td onclick="this.children[1].focus();" style="text-align:justify">
+                            <p style="margin:0;display:inline-block">$</p>
+                            <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                        </td> <!-- TODO: Add check for number -->
+                        <td><div contenteditable name="genre">Genre</div></td>
+                        <td><div contenteditable name="plat">Platform</div></td>
+                        <td><div contenteditable name="classification">Classification</div></td>
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                    </tr>
+                    <tr id="row5">
+                        <td style="border:0px;min-width:2em;"><input type="checkbox" id="row1CheckLabel"></td>
+                        <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                        <td onclick="this.children[1].focus();" style="text-align:justify">
+                            <p style="margin:0;display:inline-block">$</p>
+                            <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                        </td> <!-- TODO: Add check for number -->
+                        <td><div contenteditable name="genre">Genre</div></td>
+                        <td><div contenteditable name="plat">Platform</div></td>
+                        <td><div contenteditable name="classification">Classification</div></td>
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                    </tr>
+                    <tr id="row6">
+                        <td style="border:0px;min-width:2em;"><input type="checkbox" id="row1CheckLabel"></td>
+                        <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                        <td onclick="this.children[1].focus();" style="text-align:justify">
+                            <p style="margin:0;display:inline-block">$</p>
+                            <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                        </td> <!-- TODO: Add check for number -->
+                        <td><div contenteditable name="genre">Genre</div></td>
+                        <td><div contenteditable name="plat">Platform</div></td>
+                        <td><div contenteditable name="classification">Classification</div></td>
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                    </tr>
+                    <tr id="row7">
+                        <td style="border:0px;min-width:2em;"><input type="checkbox" id="row1CheckLabel"></td>
+                        <td><div contenteditable name="title">Test Title: The Naming</div></td>
+                        <td onclick="this.children[1].focus();" style="text-align:justify">
+                            <p style="margin:0;display:inline-block">$</p>
+                            <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
+                        </td> <!-- TODO: Add check for number -->
+                        <td><div contenteditable name="genre">Genre</div></td>
+                        <td><div contenteditable name="plat">Platform</div></td>
+                        <td><div contenteditable name="classification">Classification</div></td>
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td style="border:0px;"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br><br>
+        <button class="button" onclick="UpdateAll();">Update Selected</button>
+        <button class="button" onclick="DeleteAll();">Delete Selected</button>
     </div>
     <hr>
     <div style="text-align:center">
@@ -241,8 +329,11 @@ if (isset($file)) {
                         echo "<span style=\"color: red\">Please upload a valid file type (" . getAcceptedFileTypes() . ").</span><br>";
                 }
             ?>
-            <input type="reset" value="Clear" class="button" onclick="clearForm(this.form.id)"/>
-            <input type="submit" value="Upload" class="button"/><br><br>
+            <div style="margin-top: 0.5em">
+                <input type="reset" value="Clear" class="button" onclick="clearForm(this.form.id)"/>
+                <input type="submit" value="Upload" class="button"/>
+            </div>
+            <br><br>
             <textarea rows="8" cols="50" readonly>
             </textarea> <!-- TODO: FILL WITH BULK UPLOAD RESULTS -->
         </form>
