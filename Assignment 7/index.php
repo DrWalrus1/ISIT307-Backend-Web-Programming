@@ -7,28 +7,6 @@ $classifications;
 require_once "dbconnect.php";
 require_once "dbinteraction.php";
 
-//TODO: change to read from database
-function readCSV(){
-    $games = array();
-    $directory = fopen("games.csv", "r+") or die("Unable to open file.");
-
-    $columns = explode(",", fgets($directory));
-    $count = 0;
-        while(!feof($directory)) {
-            $line = explode(",", fgets($directory));
-            $newGame = array(
-                "id" => $count,
-                $columns[0] => $line[0],
-                $columns[1] => sprintf("%.2f", floatval($line[1])),
-                $columns[2] => $line[2],
-                $columns[3] => $line[3],
-                trim($columns[4]) => trim($line[4]),
-            );
-            $games[] = $newGame;
-            $count++;
-        }
-        return $games;
-}
 
 function loadGamesFromDB(mysqli $conn){
     $games = array();
@@ -112,7 +90,6 @@ function LoadGames($games) {
     return $rows;
 }
 
-//TODO: If createFilter.php has updated version of function. please replace with newer version
 function getPlatforms() {
     $platforms = array();
     if (!empty($_GET)) {

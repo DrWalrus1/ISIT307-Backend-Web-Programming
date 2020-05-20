@@ -3,7 +3,6 @@
 require_once "dbconnect.php";
 require_once "dbinteraction.php";
 
-// TODO: remove duplicate function
 function loadGamesFromDB(mysqli $conn){
     $games = array();
     $query = "SELECT * FROM games";
