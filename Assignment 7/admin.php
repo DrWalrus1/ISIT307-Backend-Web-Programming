@@ -230,8 +230,8 @@ if (isset($file)) {
                         <td class="col3"><div contenteditable name="genre">Genre</div></td>
                         <td class="col4"><div contenteditable name="plat">Platform</div></td>
                         <td class="col5"><div contenteditable name="classification">Classification</div></td>
-                        <td class="col6"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
-                        <td class="col6"><button class="button" onclick="console.log(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td class="col6"><button class="button" onclick="updateRow(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
+                        <td class="col6"><button class="button" onclick="deleteRow(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
                     </tr>
                 </tbody>
             </table>

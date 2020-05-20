@@ -43,4 +43,37 @@ function checkRow(rowID, isRowIncluded) {
         changedEntries = filtered;
     }
 }
+
+function updateRow(rowID) {
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "modifyData.php", true);
+    xhttp.responseType = "text";
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("type=update&rowID=" + rowID); //TODO: add row data
+    xhttp.onload = function () {
+        if (xhttp.readyState === xhttp.DONE) {
+            if (xhttp.status === 200) {
+                console.log(xhttp.response);
+            }
+        }
+    };
+
+}
+
+function deleteRow(rowID) {
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "modifyData.php", true);
+    xhttp.responseType = "text";
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("type=delete&rowID=" + rowID); //TODO: add row data
+    xhttp.onload = function () {
+        if (xhttp.readyState === xhttp.DONE) {
+            if (xhttp.status === 200) {
+                console.log(xhttp.response);
+            }
+        }
+    };
+}
 // document.getElementById("PS4").indeterminate = true;
