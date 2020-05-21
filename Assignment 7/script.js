@@ -44,39 +44,6 @@ function checkRow(rowID, isRowIncluded) {
     }
 }
 
-function updateRow(rowID) {
-    getRowData(rowID);
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "modifyData.php", true);
-    xhttp.responseType = "text";
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("type=update&rowID=" + rowID); //TODO: add row data
-    xhttp.onload = function () {
-        if (xhttp.readyState === xhttp.DONE) {
-            if (xhttp.status === 200) {
-                console.log(xhttp.response);
-            }
-        }
-    };
-
-}
-
-function deleteRow(rowID) {
-    
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "modifyData.php", true);
-    xhttp.responseType = "text";
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("type=delete&rowID=" + rowID); //TODO: add row data
-    xhttp.onload = function () {
-        if (xhttp.readyState === xhttp.DONE) {
-            if (xhttp.status === 200) {
-                console.log(xhttp.response);
-            }
-        }
-    };
-}
-
 function getRowData(rowID) {
     let rowData = document.getElementById(rowID).children;
     let rowInfo = [];
@@ -90,4 +57,47 @@ function getRowData(rowID) {
 
     }
     return rowInfo;
+}
+
+function updateRow(rowID) {
+    let data = getRowData(rowID);
+    let string = buildHTTPquery(data);
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "modifyData.php", true);
+    xhttp.responseType = "text";
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("type=update&rowID=" + rowID + "&" + string); //TODO: add row data
+    xhttp.onload = function () {
+        if (xhttp.readyState === xhttp.DONE) {
+            if (xhttp.status === 200) {
+                console.log(xhttp.response);
+            }
+        }
+    };
+
+}
+
+function deleteRow(rowID) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "modifyData.php", true);
+    xhttp.responseType = "text";
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("type=delete&rowID=" + rowID);
+    xhttp.onload = function () {
+        if (xhttp.readyState === xhttp.DONE) {
+            if (xhttp.status === 200) {
+                console.log(xhttp.response);
+            }
+        }
+    };
+}
+
+function buildHTTPquery(array) {
+    let string = "";
+    let keys = Object.keys(array);
+    keys.forEach(element => {
+        string += "data[" + element + "]=" + array[element] + "&";
+    });
+    string = string.substring(0, string.length - 1);
+    return encodeURI(string);
 }

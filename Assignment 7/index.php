@@ -223,7 +223,7 @@ $genres = getUniqueGenres($games);
 <body>
     <?php include 'header.html'?>
     <div id="searchArea" class="searchArea">
-            <form id="searchForm">
+            <form id="searchForm" style="margin-left:0.5em;">
                 <label for="titleInput">Game Title:</label>
                 <input id="titleInput" type="text" name="title" placeholder="Game Title"/>
                 <br>
