@@ -90,6 +90,17 @@ function dbGetGenre(mysqli $conn) {
     }
 }
 
+function getGenreID($gName) {
+    global $conn;
+    $genre = dbGetGenre($conn);
+    foreach ($genre as $key) {
+        if ($key["name"] == $gName) {
+            return $key["id"];
+        }
+    }
+    // TODO Add contingency to add new genre when not found
+}
+
 function getPlatformID($pName) {
     global $conn;
     $platforms = dbGetPlatforms($conn);
@@ -110,17 +121,6 @@ function getClassificationID($cName) {
         }
     }
     // TODO Add contingency to add new classification when not found
-}
-
-function getGenreID($gName) {
-    global $conn;
-    $genre = dbGetGenre($conn);
-    foreach ($genre as $key) {
-        if ($key["name"] == $gName) {
-            return $key["id"];
-        }
-    }
-    // TODO Add contingency to add new genre when not found
 }
 
 //functions that convert id's to names/initials

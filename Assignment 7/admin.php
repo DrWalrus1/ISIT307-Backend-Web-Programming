@@ -127,7 +127,7 @@ function createTableRow($game) {
             '<div contenteditable name="price" style="display:inline-block;text-align:left;">' . $game["price"] . '</div>' .
         '</td>' .
         '<td class="col3"><div contenteditable name="genre">' . $game["genre"] . '</div></td>' .
-        '<td class="col4"><div contenteditable name="plat">' . $game["platform"] . '</div></td>' .
+        '<td class="col4"><div contenteditable name="platform">' . $game["platform"] . '</div></td>' .
         '<td class="col5"><div contenteditable name="classification">' . $game["classification"] . '</div></td>' .
         '<td class="col6"><button class="button" onclick="updateRow(this.parentElement.parentElement.id);">Update</button></td>' .
         '<td class="col6"><button class="button" onclick="deleteRow(this.parentElement.parentElement.id);">Delete</button></td>' .
