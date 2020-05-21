@@ -8,25 +8,6 @@ require_once "dbconnect.php";
 require_once "dbinteraction.php";
 
 
-function loadGamesFromDB(mysqli $conn){
-    $games = array();
-    $query = "SELECT * FROM games";
-    if ($result = $conn->query($query)) {
-        while ($row = $result->fetch_assoc()) {
-            $newGame = array(
-                "id" => $row["gID"],
-                "title" => $row["title"],
-                "price" => $row["price"],
-                "genre" => getGenreNameByID($row["genre"]),
-                "platform" => getPlatformNameByID($row["platform"]),
-                "classification" => getClassificationInitialByID($row["classification"])
-            );
-            $games[] = $newGame;
-        }
-    }
-    return $games;
-}
-
 function getUniqueGenres($games) {
     $genres = array();
     foreach ($games as $key) {
@@ -207,7 +188,7 @@ function FilterGames($games) {
 $columns = dbGetColumns($conn);
 $platforms = dbGetPlatforms($conn);
 $classifications = dbGetClassification($conn);
-$games = loadGamesFromDB($conn);
+$games = loadGamesFromDB();
 $genres = getUniqueGenres($games);
 
 ?>
