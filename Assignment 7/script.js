@@ -37,6 +37,19 @@ function checkRow(rowID, isRowIncluded) {
         var filtered = changedEntries.filter(function(value){ return value !== rowID;});
         changedEntries = filtered;
     }
+
+    let buttons = document.getElementsByClassName("button all");
+    if (changedEntries.length > 0) {
+        if (buttons[0].disabled) {
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = false;
+            }
+        }
+    } else {
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = true;
+        }
+    }
 }
 
 function getRowData(rowID) {

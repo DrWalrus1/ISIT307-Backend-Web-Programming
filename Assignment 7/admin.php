@@ -121,7 +121,7 @@ function createTableRow($game) {
     $string = 
     '<tr id=' . $game["id"] . '>' .
         "<td class=\"col1\"><input type=\"checkbox\" onchange=\"checkRow(this.parentElement.parentElement.id, this.checked);\"></td>" .
-        '<td class=\"col2\"><div contenteditable name=\"title\">' . $game["title"] . '</div></td>' .
+        '<td class=\"col2\"><div contenteditable name="title">' . $game["title"] . '</div></td>' .
         '<td class="col3" onclick="this.children[1].focus();">' .
             '<p style="margin:0;display:inline-block">$</p>' .
             '<div contenteditable name="price" style="display:inline-block;text-align:left;">' . $game["price"] . '</div>' .
@@ -155,6 +155,7 @@ if (isset($file)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" type="text/css" href="table.css">
     <title>Game Store</title>
@@ -231,7 +232,7 @@ if (isset($file)) {
             <label for="updateSearch">Search: </label><input type="text" id="updateSearch"/>
             <br><br>
             <div style="display:inline-block">
-                <table class="fixed_header">
+                <table>
                     <thead>
                         <tr>
                             <th scope="col" class="col1"></th>
@@ -248,8 +249,8 @@ if (isset($file)) {
                 </table>
             </div>
             <br><br>
-            <button class="button" onclick="UpdateAll();">Update Selected</button> <!-- TODO: Have Javascript execute post/get on mass -->
-            <button class="button" onclick="DeleteAll();">Delete Selected</button> <!-- TODO: Have Javascript execute post/get on mass-->
+            <button class="button all" onclick="UpdateAll();" disabled>Update Selected</button> <!-- TODO: Have Javascript execute post/get on mass -->
+            <button class="button all" onclick="DeleteAll();" disabled>Delete Selected</button> <!-- TODO: Have Javascript execute post/get on mass-->
         </div>
         <hr>
         <div style="text-align:center">
