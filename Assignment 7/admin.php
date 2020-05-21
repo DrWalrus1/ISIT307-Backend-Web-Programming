@@ -1,4 +1,7 @@
 <?php
+require_once "dbconnect.php";
+require_once "dbinteraction.php";
+$games = loadGamesFromDB();
 $title;
 $price;
 $genre;
@@ -7,10 +10,6 @@ $classification;
 $acceptedFileTypes = array(".csv",".txt");
 $file;
 $goodFile;
-
-require_once "dbconnect.php";
-require_once "dbinteraction.php";
-
 
 function checkInputs() {
     if (!empty($_GET["formID"])) {
@@ -62,10 +61,6 @@ function checkInputs() {
     }
 }
 
-function submitLog() {
-    echo $_SERVER['REMOTE_ADDR'];
-}
-//submitLog();
 function getAcceptedFileTypes(){
     global $acceptedFileTypes;
     return implode(",", $acceptedFileTypes);
@@ -120,6 +115,33 @@ function bulkUpload($file, mysqli $conn) {
         call_user_func_array(array($stmt, 'bind_param'), refValues($games));
         $stmt->execute();
     }
+}
+
+function createTableRow($game) {
+    $string = 
+    '<tr id=' . $game["id"] . '>' .
+        "<td class=\"col1\"><input type=\"checkbox\" onchange=\"checkRow(this.parentElement.parentElement.id, this.checked);\"></td>" .
+        '<td class=\"col2\"><div contenteditable name=\"title\">' . $game["title"] . '</div></td>' .
+        '<td class="col3" onclick="this.children[1].focus();">' .
+            '<p style="margin:0;display:inline-block">$</p>' .
+            '<div contenteditable name="price" style="display:inline-block;text-align:left;">' . $game["price"] . '</div>' .
+        '</td>' .
+        '<td class="col3"><div contenteditable name="genre">' . $game["genre"] . '</div></td>' .
+        '<td class="col4"><div contenteditable name="plat">' . $game["platform"] . '</div></td>' .
+        '<td class="col5"><div contenteditable name="classification">' . $game["classification"] . '</div></td>' .
+        '<td class="col6"><button class="button" onclick="updateRow(this.parentElement.parentElement.id);">Update</button></td>' .
+        '<td class="col6"><button class="button" onclick="deleteRow(this.parentElement.parentElement.id);">Delete</button></td>' .
+    '</tr>';
+    return $string;
+}
+
+function createTbody($games) {
+    $string = "<tbody>";
+    foreach ($games as $selected) {
+        $string .= createTableRow($selected);
+    }
+    $string .= "</tbody>";
+    return $string;
 }
 
 checkInputs();
@@ -222,22 +244,7 @@ if (isset($file)) {
                             <th scope="col" class="col6"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- TODO: PHP fill rows -->
-                        <tr id="row1">
-                            <td class="col1"><input type="checkbox" id="row1CheckLabel" onchange="checkRow(this.parentElement.parentElement.id, this.checked);"></td>
-                            <td class="col2"><div contenteditable name="title">Test Title: The Naming</div></td>
-                            <td class="col3" onclick="this.children[1].focus();" style="text-align:justify">
-                                <p style="margin:0;display:inline-block">$</p>
-                                <div contenteditable name="price" onchange="checkField(this.id);" style="display:inline-block;text-align:left;"></div>
-                            </td> <!-- TODO: Add check for number -->
-                            <td class="col3"><div contenteditable name="genre">Genre</div></td>
-                            <td class="col4"><div contenteditable name="plat">Platform</div></td>
-                            <td class="col5"><div contenteditable name="classification">Classification</div></td>
-                            <td class="col6"><button class="button" onclick="updateRow(this.parentElement.parentElement.id);">Update</button></td> <!-- TODO: Have Javascript execute post/get -->
-                            <td class="col6"><button class="button" onclick="deleteRow(this.parentElement.parentElement.id);">Delete</button></td> <!-- TODO: Have Javascript execute post/get -->
-                        </tr>
-                    </tbody>
+                    <?php echo createTbody($games)?>
                 </table>
             </div>
             <br><br>

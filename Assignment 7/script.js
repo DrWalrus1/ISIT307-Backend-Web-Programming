@@ -21,11 +21,6 @@ function clearForm(formID){
 
 }
 
-function checkField(priceID) {
-    
-}
-
-
 function checkRow(rowID, isRowIncluded) {
     if (isRowIncluded) {
         let found = false;
