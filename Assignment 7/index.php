@@ -1,11 +1,11 @@
 <?php
+require_once "dbinteraction.php";
 $games;
 $columns;
 $platforms;
 $classifications;
 
-require_once "dbconnect.php";
-require_once "dbinteraction.php";
+
 
 
 function getUniqueGenres($games) {

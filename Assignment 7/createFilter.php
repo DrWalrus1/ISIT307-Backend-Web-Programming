@@ -1,6 +1,5 @@
 <?php
 
-require_once "dbconnect.php";
 require_once "dbinteraction.php";
 
 function loadGamesFromDB(mysqli $conn){

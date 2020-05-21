@@ -1,6 +1,6 @@
 <?php
-require_once "dbconnect.php";
 require_once "dbinteraction.php";
+
 $games = loadGamesFromDB();
 $title;
 $price;
@@ -118,7 +118,7 @@ function bulkUpload($file, mysqli $conn) {
 }
 
 function createTableRow($game) {
-    $string = 
+    return 
     '<tr id=' . $game["id"] . '>' .
         "<td class=\"col1\"><input type=\"checkbox\" onchange=\"checkRow(this.parentElement.parentElement.id, this.checked);\"></td>" .
         '<td class=\"col2\"><div contenteditable name="title">' . $game["title"] . '</div></td>' .
@@ -132,7 +132,6 @@ function createTableRow($game) {
         '<td class="col6"><button class="button" onclick="updateRow(this.parentElement.parentElement.id);">Update</button></td>' .
         '<td class="col6"><button class="button" onclick="deleteRow(this.parentElement.parentElement.id);">Delete</button></td>' .
     '</tr>';
-    return $string;
 }
 
 function createTbody($games) {

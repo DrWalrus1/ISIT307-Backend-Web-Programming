@@ -74,10 +74,11 @@ function updateRow(rowID) {
     xhttp.open("POST", "modifyData.php", true);
     xhttp.responseType = "text";
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("type=update&rowID=" + rowID + "&" + string); //TODO: add row data
+    xhttp.send("type=update&rowID=" + rowID + "&" + string);
     xhttp.onload = function () {
         if (xhttp.readyState === xhttp.DONE) {
             if (xhttp.status === 200) {
+                // If successful response
                 console.log(xhttp.response);
             }
         }
