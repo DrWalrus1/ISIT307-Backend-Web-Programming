@@ -2,25 +2,6 @@
 
 require_once "dbinteraction.php";
 
-function loadGamesFromDB(mysqli $conn){
-    $games = array();
-    $query = "SELECT * FROM games";
-    if ($result = $conn->query($query)) {
-        while ($row = $result->fetch_assoc()) {
-            $newGame = array(
-                "id" => $row["gID"],
-                "title" => $row["title"],
-                "price" => $row["price"],
-                "genre" => getGenreNameByID($row["genre"]),
-                "platform" => getPlatformNameByID($row["platform"]),
-                "classification" => getClassificationInitialByID($row["classification"])
-            );
-            $games[] = $newGame;
-        }
-    }
-    return $games;
-}
-
 // TODO: add aggregate counter of currently showing games matching this checkbox
 function createLabel ($inputID, $displayName) {
     return "<label for=\"$inputID\">$displayName</label>";
@@ -123,7 +104,8 @@ function createGroupedCheckboxes(array $groupNames, $category, $inputName, array
     return $string;
 }
 
-function createForm(mysqli $conn, $formID) {
+function createForm($formID) {
+    global $conn;
     $string = 
     "<div id=\"searchArea\" class=\"searchArea\"><form id=$formID>" .
     createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
@@ -139,7 +121,8 @@ function createForm(mysqli $conn, $formID) {
     return $string;
 }
 
-function getManufacturers(mysqli $conn) {
+function getManufacturers() {
+    global $conn;
     $manufacturers = array();
     $query = "SELECT DISTINCT manufacturer FROM platforms";
     if ($result = $conn->query($query)) {
@@ -151,39 +134,3 @@ function getManufacturers(mysqli $conn) {
 }
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <title>Game Store</title>
-</head>
-<body>
-    <?php include 'header.html';
-    $string = "<div id=\"searchArea\" class=\"searchArea\"><form id=\"form1>\"" .
-    createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
-    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) .
-    createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 0) . "<hr>";
-    if (!empty($_GET) && isset($_GET["platform"]))
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $_GET["platform"]);
-    else
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]");
-    
-    $string .= "<hr>";
-    $string .= createLabel("Classification", "Classification") . "<br>";
-    
-    $classification = dbGetClassification();
-    foreach ($classification as $key) {
-        $string .= createCheckboxInput($key["initial"], $key["initial"], "classification[]", false);
-    }
-    $string .= "<br><hr>";
-    $string .= createButtons();
-    $string .= "</form></div>";
-    echo $string;
-    ?>
-    <footer>
-        <script src="script.js"></script>
-    </footer>
-</body>
-</html>

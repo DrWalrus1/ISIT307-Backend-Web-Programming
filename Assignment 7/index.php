@@ -1,12 +1,10 @@
 <?php
 require_once "dbinteraction.php";
+require_once "createFilter.php";
 $games;
 $columns;
 $platforms;
 $classifications;
-
-
-
 
 function getUniqueGenres($games) {
     $genres = array();
@@ -76,6 +74,7 @@ function getPlatforms() {
     if (!empty($_GET)) {
         if (!empty($_GET['platform'])) {
             foreach ($_GET['platform'] as $selected) {
+                // TODO: add check
                 $platforms[] = $selected;
             }
         }
@@ -203,67 +202,32 @@ $genres = getUniqueGenres($games);
     <title>Game Store</title>
 </head>
 <body>
-    <?php include 'header.html'?>
-    <div id="searchArea" class="searchArea">
-            <form id="searchForm" style="margin-left:0.5em;">
-                <label for="titleInput">Game Title:</label>
-                <input id="titleInput" type="text" name="title" placeholder="Game Title"/>
-                <br>
-                <label for="minPrice">Minimum:</label>
-                <input id="minPrice" class="priceFields" type="number" name="minPrice" min="0" placeholder="0"/>
-                <br>
-                <label for="maxPrice">Maximum:</label>
-                <input id="maxPrice" class="priceFields" type="number" name="maxPrice" max="100" placeholder="100"/>
-                <br>
-                <label>Platform:</label>
-                <br>
-                <div>
-                    <!-- TODO: dynamically add checkboxes -->
-                    <!-- TODO: Add counters for current number being shown in viewArea -->
-                    <div id="PlayStation">
-                        <input type="checkbox" id="PlayStationCheckbox" name="platform[]" value="PlayStation"><label for="PlayStationCheckbox">PlayStation</label><br>
-                        <div id="PlayStationSelection" style="padding-left:0.75em">
-                            <input type="checkbox" id="PS4" name="platform[]" value="PlayStation 4"><label for="PS4">Playstation 4</label><br>
-                            <input type="checkbox" id="PS3" name="platform[]" value="PlayStation 3"><label for="PS3">Playstation 3</label><br>
-                            <input type="checkbox" id="Vita" name="platform[]" value="PlayStation Vita"><label for="Vita">Playstation Vita</label><br>
-                        </div>
-                    </div>
-                    <div id="Xbox">
-                        <input type="checkbox" id="XboxCheckbox" name="platform[]" value="Xbox"><label for="XboxCheckbox">Xbox</label><br>
-                        <div id="boxSelection" style="padding-left:0.75em">
-                            <input type="checkbox" id="Xbox360" name="platform[]" value="Xbox 360"><label for="Xbox360">Xbox 360</label><br>
-                            <input type="checkbox" id="XboxOne" name="platform[]" value="Xbox One"><label for="XboxOne">Xbox One</label><br>
-                        </div>
-                    </div>
-                    <div id="nintendo">
-                        <input type="checkbox" id="NintendoCheckbox" name="platform[]" value="Nintendo"><label for="NintendoCheckbox">Nintendo</label><br>
-                        <div id="nintendoSelection" style="padding-left:0.75em">
-                            <input type="checkbox" id="Switch" name="platform[]" value="Nintendo Switch"><label for="Switch">Nintendo Switch</label><br>
-                            <input type="checkbox" id="Wii" name="platform[]" value="Nintendo Wii"><label for="Wii">Nintendo Wii</label><br>
-                            <input type="checkbox" id="WiiU" name="platform[]" value="Nintendo Wii U"><label for="WiiU">Nintendo Wii U</label><br>
-                            <input type="checkbox" id="3DS" name="platform[]" value="Nintendo 3DS"><label for="3DS">Nintendo 3DS</label><br>
-                            <input type="checkbox" id="DS" name="platform[]" value="Nintendo DS"><label for="DS">Nintendo DS</label><br>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="PC" name="platform[]" value="PC"><label for="PC">PC</label><br>
-                </div>
-                <label>Classification:</label>
-                <br>
-                <div style="display:flex">
-                    <div class="column">
-                        <input type="checkbox" id="G" name="classification[]" value="G"><label for="G">G</label><br>
-                        <input type="checkbox" id="PG" name="classification[]" value="PG"><label for="PG">PG</label><br>
-                        <input type="checkbox" id="M" name="classification[]" value="M"><label for="M">M</label><br>  
-                    </div>
-                    <div class="column">
-                        <input type="checkbox" id="MA" name="classification[]" value="MA"><label for="MA">MA</label><br>
-                        <input type="checkbox" id="R" name="classification[]" value="R"><label for="R">R</label><br>
-                    </div>
-                </div>
-                <input class="button" type="submit" value="Search"/>
-                <button type="button" class="button" onclick="clearForm(this.form.id);">Clear</button>
-            </form>
-        </div>
+    <?php include 'header.html';
+    $string = "<div id=\"searchArea\" class=\"searchArea\"><form id=\"form1\" style=\"margin-left: 0.5em\">" .
+    createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
+    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) . // TODO: change to checkbox of price range 
+    createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 100) . "<hr>";
+    if (!empty($_GET) && isset($_GET["platform"]))
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $_GET["platform"]);
+    else
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]");
+    
+    $string .= "<hr>";
+    $string .= createLabel("Classification", "Classification") . "<br>";
+    
+    $classification = dbGetClassification();
+    foreach ($classification as $key) {
+        $string .= createCheckboxInput($key["initial"], $key["initial"], "classification[]", false);
+    }
+    $string .= "<br><hr>";
+    $string .= '<input class="button" type="submit" value="Search" style="width: -webkit-fill-available;margin-right: 0.5em;height: 2em;"/><br>
+    <div style="text-align:center">
+        <button type="button" class="button" onclick="clearForm(this.form.id);">Clear</button>
+    </div>';
+    $string .= "</form></div>";
+    echo $string;
+    ?>
+    
     <div style="text-align:center">
         <div id="viewArea" class="viewArea">
             <?php echo LoadGames(FilterGames($games))?>

@@ -73,7 +73,8 @@ function dbGetClassification() {
     }
 }
 
-function dbGetGenre(mysqli $conn) {
+function dbGetGenre() {
+    global $conn;
     $genres = array();
     $query = "SELECT * FROM genres;";
     if ($result = $conn->query($query)) {
