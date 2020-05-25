@@ -166,53 +166,84 @@ if (isset($file)) {
             <h2>Individual Upload</h2>
             <form method="get" id="gameForm">
                 <input type="hidden" name="formID" value=1>
-                <label for="gameTitle">Game Title</label><br>
-                <input type="text" id="gameTitle" name="title" value="<?= (isset($title)) ? $title: ''?>"/>
-                <br>
-                <?php
-                    if (!empty($_GET) && !isset($title) && $_GET["formID"] == 1) {
-                        echo "<span style=\"color: red\">Please enter a game title.</span>";
-                    }
-                ?>
-                <br>
-                <label for="price">Price</label><br>
-                <input type="text" id="price" name="price" value="<?= (isset($price)) ? $price: ""?>"/>
-                <br>
-                <?php
-                    if (!empty($_GET) && !isset($price) && $_GET["formID"] == 1) {
-                        echo "<span style=\"color: red\">Please enter a valid price.</span>";
-                    }
-                ?>
-                <br>
+                <div style="display:inline-block">
+                    <label for="gameTitle">Game Title: </label>
+                    <input type="text" id="gameTitle" name="title" value="<?= (isset($title)) ? $title: ''?>"/>
+                    <?php
+                        if (!empty($_GET) && !isset($title) && $_GET["formID"] == 1) {
+                            echo "<span style=\"color: red\">Please enter a game title.</span>";
+                        }
+                    ?>
+                </div>
+                <div style="display:inline-block">
+                    <label for="price">Price: </label>
+                    <input type="text" id="price" name="price" value="<?= (isset($price)) ? $price: ""?>"/>
+                    <?php
+                        if (!empty($_GET) && !isset($price) && $_GET["formID"] == 1) {
+                            echo "<span style=\"color: red\">Please enter a valid price.</span>";
+                        }
+                    ?>
+                </div>
                 <!-- TODO: Change Genre, Platform and Classification to use list of distinct categories -->
                 <!-- TODO: Add way to add new Genre, Platform and Classifications... -->
-                <label for="genre">Genre</label><br>
-                <input type="text" id="genre" name="genre" value="<?= (isset($genre)) ? $genre: ""?>"/>
-                <br>
-                <?php
-                    if (!empty($_GET) && !isset($genre) && $_GET["formID"] == 1) {
-                        echo "<span style=\"color: red\">Please enter a genre.</span>";
-                    }
-                ?>
-                <br>
-                <label for="platform">Platform</label><br>
-                <input type="text" id="platform" name="platform" value="<?= (isset($platform)) ? $platform: ""?>"/>
-                <br>
-                <?php
-                    if (!empty($_GET) && !isset($platform) && $_GET["formID"] == 1) {
-                        echo "<span style=\"color: red\">Please enter a valid platform.</span>";
-                    }
-                ?>
-                <br>
-                <label for="classification">Classification</label><br>
-                <input type="text" id="classification" name="classification" value="<?= (isset($classification)) ? $classification: ""?>"/>
-                <br>
-                <?php
-                    if (!empty($_GET) && !isset($platform) && $_GET["formID"] == 1) {
-                        echo "<span style=\"color: red\">Please enter a valid classification.</span>";
-                    }
-                ?>
-                <br>
+                <div style="display:inline-block">
+                    <label for="genre">Genre: </label>
+                    <select name="genre">
+                        <option value="" selected disabled style="display:none"></option>
+                    <?php
+                        $platforms = dbGetGenre();
+                        $string = "";
+                        foreach ($platforms as $key) {
+                            $string .= '<option value="' . $key["name"] . '">' . $key["name"] . '</option>';
+                        }
+                        echo $string;
+                    ?>
+                    </select>
+                    <?php
+                        if (!empty($_GET) && !isset($genre) && $_GET["formID"] == 1) {
+                            echo "<span style=\"color: red\">Please enter a genre.</span>";
+                        }
+                    ?>
+                </div>
+                <div style="display:inline-block">
+                    <label for="platform">Platform: </label>
+                    <select name="platform">
+                        <option value="" selected disabled style="display:none"></option>
+                    <?php
+                        $platforms = dbGetPlatforms();
+                        $string = "";
+                        foreach ($platforms as $key) {
+                            $string .= '<option value="' . $key["name"] . '">' . $key["name"] . '</option>';
+                        }
+                        echo $string;
+                    ?>
+                    </select>
+                    <?php
+                        if (!empty($_GET) && !isset($platform) && $_GET["formID"] == 1) {
+                            echo "<span style=\"color: red\">Please enter a valid platform.</span>";
+                        }
+                    ?>
+                </div>
+                <div style="display:inline-block">
+                    <label for="classification">Classification: </label>
+                    <select name="classification">
+                        <option value="" selected disabled style="display:none"></option>
+                    <?php
+                        $platforms = dbGetClassification();
+                        $string = "";
+                        foreach ($platforms as $key) {
+                            $string .= '<option value="' . $key["initial"] . '">' . $key["initial"] . '</option>';
+                        }
+                        echo $string;
+                    ?>
+                    </select>
+                    <?php
+                        if (!empty($_GET) && !isset($platform) && $_GET["formID"] == 1) {
+                            echo "<span style=\"color: red\">Please enter a valid classification.</span>";
+                        }
+                    ?>
+                </div>
+                <br><br>
                 <span>
                     <input type="reset" value="Clear" class="button" onclick="clearForm(this.form.id)"/>
                     <input type="submit" value="Add Game" class="button"/>
