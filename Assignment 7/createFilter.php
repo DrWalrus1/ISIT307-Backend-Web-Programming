@@ -40,6 +40,17 @@ function createNumberInput($displayName, $inputID, $inputName, $minNum = NULL, $
     return $string;
 }
 
+function createNumberRange($labelName, $inputID, $inputName, $range, bool $wasSelected) {
+    $string = "";
+    if ($wasSelected) {
+        $string .= "<input id=\"$inputID\" type=\"radio\" name=\"$inputName\" value=\"$range\" checked/>";
+    } else {
+        $string .= "<input id=\"$inputID\" type=\"radio\" name=\"$inputName\" value=\"$range\"/>";
+    }
+    $string .= createLabel($inputID, $labelName) . "<br>";
+    return $string;
+}
+
 //Create individual checkbox with label
 function createCheckboxInput($labelName, $displayName, $inputID, $inputName, $isChecked) {
     $string =

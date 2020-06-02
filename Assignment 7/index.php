@@ -17,7 +17,6 @@ function createCard($game) {
             <h6 name=\"platform\">" . $game["platform"] . "</h4>
             <h6 name=\"classification\">" . $game["classification"] . "</h4>
             <h4 name=\"price\">$" . $game["price"] . "</h4>
-            <br><br>
     </div>";
     addToFilterCount($game["genre"]);
     addToFilterCount($game["platform"]);
@@ -97,7 +96,6 @@ function getClassification() {
         }
     }
     if (!empty($classification)){
-        print_r($classification);
         return $classification;
     }
 }
@@ -122,6 +120,20 @@ function getMaxPrice() {
     if (!empty($_GET)) {
         if (!empty($_GET['maxPrice'])) {
             return $_GET['maxPrice'];
+        }
+    }
+}
+
+function getPriceRange() {
+    if (!empty($_GET)) {
+        if (!empty($_GET['pRange'])) {
+            $range["val1"] = explode("-", $_GET['pRange'])[0];
+            $range["val2"] = explode("-", $_GET['pRange'])[1];
+            if (intval($range["val1"]) < intval($range["val2"])) {
+                return array("min"=> intval($range["val1"]), "max" => intval($range["val2"]));
+            } else {
+                return array("min"=> intval($range["val2"]), "max" => intval($range["val1"]));
+            }
         }
     }
 }
@@ -151,8 +163,8 @@ function setGroupFilterCount() {
 
 function FilterGames($games) {
     $title = getTitle();
-    $minPrice = getMinPrice();
-    $maxPrice = getMaxPrice();
+    $minPrice = (isset(getPriceRange()["min"]) ? getPriceRange()["min"] : null);
+    $maxPrice = (isset(getPriceRange()["max"]) ? getPriceRange()["max"] : null);
     $genres = getGenres();
     $platforms = getPlatforms();
     $classifications = getClassification();
@@ -168,7 +180,6 @@ function FilterGames($games) {
         //Min Price
         if (isset($minPrice)) {
             if ($selected['price'] < $minPrice) {
-                // TODO: add to filter count later 
                 continue;
             }
         }
@@ -248,8 +259,13 @@ setGroupFilterCount();
     <?php include 'header.html';
     $string = "<div id=\"searchArea\" class=\"searchArea\"><form id=\"form1\" style=\"margin-left: 0.5em; padding-bottom: 7em\">" .
     createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
-    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) . // TODO: change to checkbox of price range
-    createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 100) . "<hr>";
+    createLabel("Price", "Price Range") . "<br>" .
+    createNumberRange("$0-$20"/**/, "0-20", "pRange", "0-20", (isset($_GET["pRange"]) && $_GET["pRange"] == "0-20")) .
+    createNumberRange("$21-$40"/**/, "21-40", "pRange", "21-40", (isset($_GET["pRange"]) && $_GET["pRange"] == "21-40")) .
+    createNumberRange("$41-$60"/**/, "41-60", "pRange", "41-60", (isset($_GET["pRange"]) && $_GET["pRange"] == "41-60")) .
+    createNumberRange("$61-$80"/**/, "61-80", "pRange", "61-80", (isset($_GET["pRange"]) && $_GET["pRange"] == "61-80")) .
+    createNumberRange("$81-$100"/**/, "81-100", "pRange", "81-100", (isset($_GET["pRange"]) && $_GET["pRange"] == "81-100"));
+    $string .= "<hr>";
     //Platform
     $string .= createLabel("Platform", "Platform") . "<br>";
     if (!empty($_GET) && isset($_GET["platform"]))
@@ -310,10 +326,7 @@ setGroupFilterCount();
     <div style="text-align:center">
         <div id="viewArea" class="viewArea">
             <?php echo $cards;?>
-            <br>
-            <br>
         </div>
-        <?php setGroupFilterCount() ?>
     </div>
     <footer>
         <script src="script.js"></script>

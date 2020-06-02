@@ -16,6 +16,8 @@ function clearForm(formID){
             }
         } else if (input.type == "checkbox") {
             input.checked = false;
+        } else if (input.type == "radio") {
+            input.checked = false;
         }
     });
 

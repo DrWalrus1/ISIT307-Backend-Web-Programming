@@ -37,9 +37,9 @@ function checkInputs() {
                 }
 
                 if (isset($title, $price, $genre, $platform, $classification)) {
-                    $gameArray = array($title, $price, $genre, $platform, $classification);
+                    $gameArray = array($title, $price, getGenreID($genre), getPlatformID($platform), getClassificationID($classification));
                     AddGame($gameArray);
-                    header("Location: /");
+                    header("Location: /admin.php");
                 }
                 break;
             case 3:
@@ -67,10 +67,13 @@ function getAcceptedFileTypes(){
 }
 
 function AddGame($game) {
-    $directory = fopen("games.csv", "a+") or die("Unable to open file!");
-    fwrite($directory, "\n");
-    fwrite($directory, implode(",", $game));
-    fclose($directory);
+    global $conn;
+    $query = "INSERT INTO games (title, price, genre, platform, classification) VALUES (?,?,?,?,?);";
+    if ($stmt = $conn->prepare($query)) { 
+        $stmt->bind_param("sdiii", $game[0], $game[1], $game[2], $game[3], $game[4]);
+        $result = $stmt->execute();
+        echo $result;
+    }
     
 }
 

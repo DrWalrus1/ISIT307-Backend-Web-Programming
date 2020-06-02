@@ -5,4 +5,3 @@ RewriteCond %{HTTP_HOST} ^(www\.)?localhost
 # RewriteRule ^(.*)$ http://localhost/$1 [R,L]
 
 # Main pages
-RewriteRule ^admin?$ admin.php

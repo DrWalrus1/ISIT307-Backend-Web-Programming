@@ -84,7 +84,6 @@ function updateRow($array) {
         if ( false===$result ) {
             die('execute() failed: '.$stmt->error);
         }
-        $stmt->close();
     }
 }
 
@@ -100,7 +99,7 @@ function deleteRow($rowID) {
         if ( false===$result ) {
             die('execute() failed: '.$stmt->error);
         }
-        $stmt->close();
+
     }
 }
 

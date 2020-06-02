@@ -1,0 +1,89 @@
+body {
+    /* padding-bottom: 6em; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+.searchArea {
+    margin-top: 4.85em;
+    margin-left: -0.47em;
+    padding: 0;
+    width: 13em;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+.viewArea {
+    padding-top: 6em;
+    margin-left: 16em;
+}
+
+textarea {
+    outline: none;
+    overflow: auto;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    margin-right: -10%;
+    margin-left: -10%;
+}
+
+.cardCard {
+    text-align:center;
+    min-width: 25%;
+    max-width: 25%;
+    margin:1.25%;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.header {
+    background-color: forestgreen;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 1em;
+}
+
+.button {
+    cursor:pointer;
+    margin-left: .5em;
+}
+
+.priceFields {
+    width:4em;
+}
+
+.column {
+    text-align: left;
+    float: left;
+    width: auto;
+    margin-left: 1em;
+}
+
+.row::after {
+    max-width: 50%;
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.homeLink {
+    color: black;
+    text-decoration:none;
+}
+
+.homeLink:visited {
+    color: black;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+    }
+}

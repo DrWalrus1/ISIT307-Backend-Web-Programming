@@ -187,7 +187,6 @@ function getPlatformNamesByManufacturers() {
             while ($row = $result->fetch_assoc()) {
                 $platforms[$key][] = $row["pName"];
             }
-            $stmt->close();
         }
     }
     if (!empty($platforms)) {

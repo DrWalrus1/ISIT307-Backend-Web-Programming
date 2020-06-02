@@ -1,6 +1,7 @@
 body {
-    padding-bottom: 6em;
+    /* padding-bottom: 6em; */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
 }
 
 .searchArea {
@@ -16,7 +17,7 @@ body {
 
 .viewArea {
     padding-top: 6em;
-    margin-left: 10%;
+    margin-left: 16em;
 }
 
 textarea {
@@ -24,11 +25,11 @@ textarea {
     overflow: auto;
 }
 
-
-
 .row {
     display: flex;
     justify-content: center;
+    margin-right: -10%;
+    margin-left: -10%;
 }
 
 .cardCard {
