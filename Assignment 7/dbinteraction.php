@@ -154,4 +154,45 @@ function getGenreNameByID($gID) {
         }
     }
 }
+
+function getManufacturers() {
+    global $conn;
+    $manufacturers = array();
+    $query = "SELECT DISTINCT manufacturer FROM platforms";
+    if ($result = $conn->query($query)) {
+        while ($row = $result->fetch_assoc()) {
+            $manufacturers[] = $row["manufacturer"];
+        }
+    }
+    return $manufacturers;
+}
+
+function getPlatformNamesByManufacturers() {
+    global $conn;
+    $manufacturers = getManufacturers();
+    $platforms = array();
+    $query = "SELECT pName FROM PLATFORMS WHERE manufacturer = ?";
+    foreach ($manufacturers as $key) {
+        if ($stmt = $conn->prepare($query)) {
+            $result = $stmt->bind_param("s", $key);
+            if (false === $result) {//if bind_param didn't work
+                die('bind_param() failed');
+            }
+            $result = $stmt->execute();
+            if (false === $result) {//failed to execute
+                die('execute() failed: '. $stmt->error);
+            }
+            $result = $stmt->get_result();
+            $platforms[$key] = array();
+            while ($row = $result->fetch_assoc()) {
+                $platforms[$key][] = $row["pName"];
+            }
+            $stmt->close();
+        }
+    }
+    if (!empty($platforms)) {
+        return $platforms;
+    }
+}
+
 ?>

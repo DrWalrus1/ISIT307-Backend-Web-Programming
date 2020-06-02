@@ -6,6 +6,7 @@ $columns;
 $genres;
 $platforms;
 $classifications;
+$filterCount = array();
 
 
 function createCard($game) { 
@@ -18,6 +19,9 @@ function createCard($game) {
             <h4 name=\"price\">$" . $game["price"] . "</h4>
             <br><br>
     </div>";
+    addToFilterCount($game["genre"]);
+    addToFilterCount($game["platform"]);
+    addToFilterCount($game["classification"]);
     return $newCard;
 }
 
@@ -122,6 +126,29 @@ function getMaxPrice() {
     }
 }
 
+function addToFilterCount($key) {
+    global $filterCount;
+    if (array_key_exists($key, $filterCount)) {
+        $filterCount[$key]++;
+    } else {
+        $filterCount[$key] = 1;
+    }
+}
+
+function setGroupFilterCount() {
+    global $filterCount;
+    $manufacturers = getPlatformNamesByManufacturers();
+    foreach ($manufacturers as $key => $value) {
+        $count = 0;
+        for ($i = 0; $i < count($value); $i++) {
+            if (array_key_exists($value[$i], $filterCount)) {
+                $count += $filterCount[$value[$i]];
+            }
+        }
+        $filterCount[$key] = $count;
+    }
+}
+
 function FilterGames($games) {
     $title = getTitle();
     $minPrice = getMinPrice();
@@ -141,6 +168,7 @@ function FilterGames($games) {
         //Min Price
         if (isset($minPrice)) {
             if ($selected['price'] < $minPrice) {
+                // TODO: add to filter count later 
                 continue;
             }
         }
@@ -203,6 +231,8 @@ function FilterGames($games) {
 $games = loadGamesFromDB();
 $genres = getGenres();
 $classifications = getClassification();
+$cards = LoadGames(FilterGames($games));
+setGroupFilterCount();
 ?>
 
 <!DOCTYPE html>
@@ -223,15 +253,17 @@ $classifications = getClassification();
     //Platform
     $string .= createLabel("Platform", "Platform") . "<br>";
     if (!empty($_GET) && isset($_GET["platform"]))
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $_GET["platform"]);
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $filterCount, $_GET["platform"]);
     else
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]");
+        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $filterCount);
     
     $string .= "<hr>";
     //Genres
     $string .= createLabel("Genre", "Genre") . "<br>";
     $dbgenres = dbGetGenre();
+    
     foreach ($dbgenres as $key) {
+        $count = "(0)";
         $found = false;
         if (isset($genres)) {
             for ($i = 0; $i < count($genres); $i++) {
@@ -241,13 +273,17 @@ $classifications = getClassification();
                 }
             }
         }
-        $string .= createCheckboxInput($key["name"], $key["name"], "genre[]", $found);
+        if (array_key_exists($key["name"], $filterCount)) {
+            $count = "(" . $filterCount[$key["name"]] . ")";
+        }
+        $string .= createCheckboxInput($key["name"] . " " . $count, $key["name"], $key["name"], "genre[]", $found);
     }
     $string .= "<hr>";
     //Classification
     $string .= createLabel("Classification", "Classification") . "<br>";
     $dbclassification = dbGetClassification();
     foreach ($dbclassification as $key) {
+        $count = "(0)";
         $found = false;
         if (isset($classifications)) {
             for ($i = 0; $i < count($classifications); $i++) {
@@ -257,9 +293,12 @@ $classifications = getClassification();
                 }
             }
         }
-        $string .= createCheckboxInput($key["initial"], $key["initial"], "classification[]", $found);
+        if (array_key_exists($key["initial"], $filterCount)) {
+            $count = "(" . $filterCount[$key["initial"]] . ")";
+        }
+        $string .= createCheckboxInput($key["initial"] . " " . $count, $key["initial"], $key["initial"], "classification[]", $found);
     }
-    $string .= "<br><hr>";
+    $string .= "<hr>";
     $string .= '<input class="button" type="submit" value="Search" style="width: -webkit-fill-available;margin-right: 0.5em;height: 2em;"/><br>
     <div style="text-align:center">
         <button type="button" class="button" onclick="clearForm(this.form.id);">Clear</button>
@@ -270,10 +309,11 @@ $classifications = getClassification();
     
     <div style="text-align:center">
         <div id="viewArea" class="viewArea">
-            <?php echo LoadGames(FilterGames($games))?>
+            <?php echo $cards;?>
             <br>
             <br>
         </div>
+        <?php setGroupFilterCount() ?>
     </div>
     <footer>
         <script src="script.js"></script>

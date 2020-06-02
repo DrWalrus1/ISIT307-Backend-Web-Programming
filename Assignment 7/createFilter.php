@@ -41,14 +41,14 @@ function createNumberInput($displayName, $inputID, $inputName, $minNum = NULL, $
 }
 
 //Create individual checkbox with label
-function createCheckboxInput($displayName, $inputID, $inputName, $isChecked) {
+function createCheckboxInput($labelName, $displayName, $inputID, $inputName, $isChecked) {
     $string =
     "<input type=\"checkbox\" id=\"$inputID\" name=\"$inputName\" value=\"$displayName\"";
     if ($isChecked) {
         $string .= " checked";
     }
     $string .= ">" .
-    createLabel($inputID, $displayName) .
+    createLabel($inputID, $labelName) .
     "<br>\n";
     return $string;
 }
@@ -69,14 +69,15 @@ function initialiseCheckboxGroup($groupName, $category, array $stickyValues = NU
 
 //Create grouped checkboxes e.g. manufacturer
 //TODO: anonymize function
-function createGroupedCheckboxes(array $groupNames, $category, $inputName, array $stickyValues = NULL) {
+function createGroupedCheckboxes(array $groupNames, $category, $inputName, array $filterCount, array $stickyValues = NULL) {
     $platforms = dbGetPlatforms();
     $string = "";
     foreach ($groupNames as $groupName) {
         $string .= initialiseCheckboxGroup($groupName, $category, $stickyValues);
-        $string .= createLabel(($groupName . "Checkbox"), $groupName) . "<br>" .
+        $string .= createLabel(($groupName . "Checkbox"), $groupName . " (" . $filterCount[$groupName] . ")") . "<br>" .
             "<div id=\"" . $groupName . "Selection\" style=\"padding-left:0.75em\">";
         foreach ($platforms as $platform) {
+            $count = (array_key_exists($platform["name"], $filterCount) ? " (" . $filterCount[$platform["name"]] . ")" : " (0)");
             if ($platform["name"] != $platform["manufacturer"]) {
                 if ($platform["manufacturer"] == $groupName) {
                     $found = false;
@@ -84,14 +85,14 @@ function createGroupedCheckboxes(array $groupNames, $category, $inputName, array
                     if (!is_null($stickyValues) && isset($stickyValues[$groupName])) {
                         for ($i=0; $i < count($stickyValues[$groupName]); $i++) {
                             if ($stickyValues[$groupName][$i] == $platform["name"]) {
-                                $string .= createCheckboxInput($platform["name"], $platform["initial"], str_replace("[]", "[" . $groupName . "][]", $inputName), true);
+                                $string .= createCheckboxInput($platform["name"] . $count, $platform["name"], $platform["initial"], str_replace("[]", "[" . $groupName . "][]", $inputName), true);
                                 $found = true;
                                 break;
                             }
                         }
                     }
                     if (!$found) {
-                    $string .= createCheckboxInput($platform["name"], $platform["initial"], str_replace("[]", "[" . $groupName . "][]", $inputName), false);
+                    $string .= createCheckboxInput($platform["name"] . $count, $platform["name"], $platform["initial"], str_replace("[]", "[" . $groupName . "][]", $inputName), false);
                     }
                     
                 }
@@ -100,35 +101,6 @@ function createGroupedCheckboxes(array $groupNames, $category, $inputName, array
         $string .= "</div></div>";
     }
     return $string;
-}
-
-function createForm($formID) {
-    global $conn;
-    $string = 
-    "<div id=\"searchArea\" class=\"searchArea\"><form id=$formID>" .
-    createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
-    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) .
-    createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 0) . "<hr>";
-    if (!empty($_GET) && isset($_GET["platform"])) {
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $_GET["platform"]);
-    } else {
-        $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]");
-    }
-    $string .= createButtons();
-    $string .= "</form></div>";
-    return $string;
-}
-
-function getManufacturers() {
-    global $conn;
-    $manufacturers = array();
-    $query = "SELECT DISTINCT manufacturer FROM platforms";
-    if ($result = $conn->query($query)) {
-        while ($row = $result->fetch_assoc()) {
-            $manufacturers[] = $row["manufacturer"];
-        }
-    }
-    return $manufacturers;
 }
 
 ?>
