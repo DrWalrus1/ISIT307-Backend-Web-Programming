@@ -57,12 +57,12 @@ function initialiseCheckboxGroup($groupName, $category, array $stickyValues = NU
     $string = "<div id=\"$groupName\">\n";
     if (!is_null($stickyValues) && isset($stickyValues[$groupName])) {
         if ($stickyValues[$groupName][0] == $groupName) {
-            $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\" checked>";
+            $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" onchange=\"selectAll(this.value, this.checked)\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\" checked>";
         } else {
-            $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\">";
+            $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" onchange=\"selectAll(this.value, this.checked)\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\">";
         }
     } else {
-        $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\">";
+        $string .= "<input type=\"checkbox\" id=\"" . $groupName . "Checkbox\" onchange=\"selectAll(this.value, this.checked)\" name=\"" . $category . "[" . $groupName . "][]\" value=\"$groupName\">";
     }
     return $string;
 }

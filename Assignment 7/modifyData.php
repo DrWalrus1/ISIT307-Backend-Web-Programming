@@ -13,7 +13,7 @@ if (!empty($_POST)) {
             updateRow($array);
         }
     } else if ($_POST["type"] == "delete") {
-        deleteRow($_GET["rowID"]);
+        deleteRow($_POST["rowID"]);
     }
 } elseif (!empty($_GET)) { //DEBUGING
     if ($_GET["type"] == "update") {

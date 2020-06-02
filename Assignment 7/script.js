@@ -101,6 +101,18 @@ function deleteRow(rowID) {
     };
 }
 
+function UpdateAll() {
+    changedEntries.forEach(element => {
+        updateRow(element);
+    });
+}
+
+function DeleteAll() {
+    changedEntries.forEach(element => {
+        deleteRow(element);
+    });
+}
+
 function buildHTTPquery(array) {
     let string = "";
     let keys = Object.keys(array);
@@ -109,4 +121,12 @@ function buildHTTPquery(array) {
     });
     string = string.substring(0, string.length - 1);
     return encodeURI(string);
+}
+
+function selectAll(divID, isSelected) {
+    var inputs = document.getElementById(divID + "Selection").getElementsByTagName("input");
+    
+    for (let index = 0; index < inputs.length; index++) {
+        inputs[index].checked = isSelected;
+    }
 }

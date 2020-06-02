@@ -73,9 +73,9 @@ function getPlatforms() {
     $platforms = array();
     if (!empty($_GET)) {
         if (!empty($_GET['platform'])) {
-            foreach ($_GET['platform'] as $selected) {
+            foreach ($_GET['platform'] as $key) {
                 // TODO: add check
-                $platforms[] = $selected;
+                $platforms[] = $key;
             }
         }
     }
@@ -94,6 +94,7 @@ function getClassification() {
         }
     }
     if (!empty($classification)){
+        print_r($classification);
         return $classification;
     }
 }
@@ -128,7 +129,7 @@ function FilterGames($games) {
     $maxPrice = getMaxPrice();
     $platforms = getPlatforms();
     $classifications = getClassification();
-
+    print_r($classifications);
     $filtered = array();
 
     foreach ($games as $selected) {
@@ -151,13 +152,16 @@ function FilterGames($games) {
                 continue;
             }
         }
+
         //Platform
         if (!empty($platforms)) {
             $found = false;
             foreach ($platforms as $platform) {
-                if ($platform === $selected["platform"]) {
-                    $found = true;
-                    break;
+                foreach ($platform as $key) {
+                    if ($key === $selected["platform"]) {
+                        $found = true;
+                        break;
+                    }
                 }
             }
             
@@ -189,7 +193,6 @@ $platforms = dbGetPlatforms($conn);
 $classifications = dbGetClassification($conn);
 $games = loadGamesFromDB();
 $genres = getUniqueGenres($games);
-
 ?>
 
 <!DOCTYPE html>
@@ -217,6 +220,7 @@ $genres = getUniqueGenres($games);
     
     $classification = dbGetClassification();
     foreach ($classification as $key) {
+        // TODO: Sticky form
         $string .= createCheckboxInput($key["initial"], $key["initial"], "classification[]", false);
     }
     $string .= "<br><hr>";
