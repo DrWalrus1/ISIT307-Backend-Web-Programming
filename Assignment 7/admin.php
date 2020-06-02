@@ -55,7 +55,7 @@ function checkInputs() {
                 }
                 break;
             default:
-                header("Location: /admin.php");
+                header("Location: /admin");
             break;
         }
     }
