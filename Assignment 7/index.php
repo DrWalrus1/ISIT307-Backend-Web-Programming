@@ -202,6 +202,7 @@ function FilterGames($games) {
 }
 $games = loadGamesFromDB();
 $genres = getGenres();
+$classifications = getClassification();
 ?>
 
 <!DOCTYPE html>
@@ -245,10 +246,18 @@ $genres = getGenres();
     $string .= "<hr>";
     //Classification
     $string .= createLabel("Classification", "Classification") . "<br>";
-    $classification = dbGetClassification();
-    foreach ($classification as $key) {
-        // TODO: Sticky form
-        $string .= createCheckboxInput($key["initial"], $key["initial"], "classification[]", false);
+    $dbclassification = dbGetClassification();
+    foreach ($dbclassification as $key) {
+        $found = false;
+        if (isset($classifications)) {
+            for ($i = 0; $i < count($classifications); $i++) {
+                if ($classifications[$i] == $key["initial"]) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        $string .= createCheckboxInput($key["initial"], $key["initial"], "classification[]", $found);
     }
     $string .= "<br><hr>";
     $string .= '<input class="button" type="submit" value="Search" style="width: -webkit-fill-available;margin-right: 0.5em;height: 2em;"/><br>
