@@ -22,7 +22,8 @@ function loadGamesFromDB(){
 }
 
 // A challenge I rose too
-function dbGetColumns(mysqli $conn){
+function dbGetColumns(){
+    global $conn;
     $columns = array();
     $query = "SELECT COLUMN_NAME
     FROM information_schema.COLUMNS

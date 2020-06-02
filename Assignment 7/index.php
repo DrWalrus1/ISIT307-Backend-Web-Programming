@@ -3,24 +3,10 @@ require_once "dbinteraction.php";
 require_once "createFilter.php";
 $games;
 $columns;
+$genres;
 $platforms;
 $classifications;
 
-function getUniqueGenres($games) {
-    $genres = array();
-    foreach ($games as $key) {
-        $found = false;
-        for ($i = 0; $i < count($genres); $i++) {
-            if ($genres[$i] == $key["genre"]) {
-                $found = true;
-            }
-        }
-        if (!$found) {
-            $genres[] = $key["genre"];
-        }
-    }
-    return $genres;
-}
 
 function createCard($game) { 
     $newCard =
@@ -69,12 +55,25 @@ function LoadGames($games) {
     return $rows;
 }
 
+function getGenres() {
+    $genres = array();
+    if (!empty($_GET)) {
+        if (!empty($_GET['genre'])) {
+            foreach ($_GET['genre'] as $key) {
+                $genres[] = $key;
+            }
+        }
+    }
+    if (!empty($genres)){
+        return $genres;
+    }
+}
+
 function getPlatforms() {
     $platforms = array();
     if (!empty($_GET)) {
         if (!empty($_GET['platform'])) {
             foreach ($_GET['platform'] as $key) {
-                // TODO: add check
                 $platforms[] = $key;
             }
         }
@@ -127,9 +126,9 @@ function FilterGames($games) {
     $title = getTitle();
     $minPrice = getMinPrice();
     $maxPrice = getMaxPrice();
+    $genres = getGenres();
     $platforms = getPlatforms();
     $classifications = getClassification();
-    print_r($classifications);
     $filtered = array();
 
     foreach ($games as $selected) {
@@ -149,6 +148,19 @@ function FilterGames($games) {
         //Max Price
         if (isset($maxPrice)) {
             if ($selected['price'] > $maxPrice) {
+                continue;
+            }
+        }
+        //Genre
+        if (!empty($genres)) {
+            $found = false;
+            foreach ($genres as $key) {
+                if ($key == $selected["genre"]) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
                 continue;
             }
         }
@@ -188,11 +200,8 @@ function FilterGames($games) {
     }
     return $filtered;
 }
-$columns = dbGetColumns($conn);
-$platforms = dbGetPlatforms($conn);
-$classifications = dbGetClassification($conn);
 $games = loadGamesFromDB();
-$genres = getUniqueGenres($games);
+$genres = getGenres();
 ?>
 
 <!DOCTYPE html>
@@ -206,18 +215,36 @@ $genres = getUniqueGenres($games);
 </head>
 <body>
     <?php include 'header.html';
-    $string = "<div id=\"searchArea\" class=\"searchArea\"><form id=\"form1\" style=\"margin-left: 0.5em\">" .
+    $string = "<div id=\"searchArea\" class=\"searchArea\"><form id=\"form1\" style=\"margin-left: 0.5em; padding-bottom: 7em\">" .
     createTextInput("Game Title", "titleInput", "title", "Game Title") . "<hr>" .
-    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) . // TODO: change to checkbox of price range 
+    createNumberInput("Minimum", "minPrice", "minPrice", 0, NULL, 0) . // TODO: change to checkbox of price range
     createNumberInput("Maximum", "maxPrice", "maxPrice", NULL, 100, 100) . "<hr>";
+    //Platform
+    $string .= createLabel("Platform", "Platform") . "<br>";
     if (!empty($_GET) && isset($_GET["platform"]))
         $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]", $_GET["platform"]);
     else
         $string .= createGroupedCheckboxes(getManufacturers($conn), "platform", "platform[]");
     
     $string .= "<hr>";
+    //Genres
+    $string .= createLabel("Genre", "Genre") . "<br>";
+    $dbgenres = dbGetGenre();
+    foreach ($dbgenres as $key) {
+        $found = false;
+        if (isset($genres)) {
+            for ($i = 0; $i < count($genres); $i++) {
+                if ($genres[$i] == $key["name"]) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        $string .= createCheckboxInput($key["name"], $key["name"], "genre[]", $found);
+    }
+    $string .= "<hr>";
+    //Classification
     $string .= createLabel("Classification", "Classification") . "<br>";
-    
     $classification = dbGetClassification();
     foreach ($classification as $key) {
         // TODO: Sticky form
